@@ -1,0 +1,1 @@
+# copilot-read-image
