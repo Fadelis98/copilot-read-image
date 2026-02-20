@@ -81,6 +81,13 @@ Enable GitHub Copilot to analyze images directly within chat workflows by provid
   - 合并流程
   - 问题排查
 
+**🔧 Agent工作流改进 (从Phase 1学到的经验)**:
+- [AGENT_WORKFLOW_IMPROVEMENTS.md](AGENT_WORKFLOW_IMPROVEMENTS.md) - Phase 1合并中发现的问题及改进
+  - 6大问题识别和解决方案
+  - 新的初始化脚本
+  - 改进的检查清单
+  - 对Phase 2及后续的建议
+
 **必读文档 (Start Here)**:
 - [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) - 5阶段开发路线图
 - [SYSTEM_STATUS.md](SYSTEM_STATUS.md) - 系统当前状态概览
@@ -88,6 +95,7 @@ Enable GitHub Copilot to analyze images directly within chat workflows by provid
 **工作参考**:
 - [AUTOMATION_GUIDE.md](AUTOMATION_GUIDE.md) - 自动化工作流详细指南
 - [MERGE_CHECKLIST.md](MERGE_CHECKLIST.md) - PR合并前验证清单
+- [LOCAL_TESTING_GUIDE.md](LOCAL_TESTING_GUIDE.md) - 本地测试和调试指南
 
 **快速查询**:
 - [README.md](README.md) - 项目基本信息

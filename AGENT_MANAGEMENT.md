@@ -449,6 +449,29 @@ git log --oneline | head -5                  # 查看新提交
 
 ---
 
+## 📚 从Phase 1学到的经验教训
+
+**重要**: 在Phase 1的PR合并过程中，我们发现了Agent工作流程中的几个可改进之处。
+
+**详细改进文档**: [AGENT_WORKFLOW_IMPROVEMENTS.md](AGENT_WORKFLOW_IMPROVEMENTS.md)
+
+**关键发现** (6个问题):
+1. 依赖安装不同步 → 使用 `npm ci` 和初始化脚本解决
+2. Merge冲突处理不清晰 → 预检冲突并定义处理策略
+3. 本地测试验证不完整 → 完整的检查清单
+4. 错误处理不充分 → 标准化错误处理模式
+5. 文档与实践脱节 → Agent合并前清单
+6. F5调试被跳过 → 标记为**必需**步骤
+
+**对Phase 2+ Agent的建议**:
+- 使用 `./scripts/checkout-and-initialize.sh <branch>` 初始化工作环境
+- 遵循 [AGENT_WORKFLOW_IMPROVEMENTS.md](AGENT_WORKFLOW_IMPROVEMENTS.md) 中的改进检查清单
+- 对扩展类PR，F5调试测试是**必需**步骤，不是可选
+- 在合并前预检merge conflicts
+- 使用标准化的错误处理和日志记录
+
+---
+
 **Last Updated**: 2026-02-20  
-**Purpose**: 指导在新对话中继续Agent工作管理  
-**Status**: 🟢 Ready for Use
+**Purpose**: 指导在新对话中继续Agent工作管理，包括改进经验  
+**Status**: 🟢 Ready for Use with Improvements
