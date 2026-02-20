@@ -82,11 +82,9 @@ export class ReadImageFromPathTool
       source: resolvedPath,
     });
 
-    const dataUrl = `data:${mimeType};base64,${data.toString('base64')}`;
-
     return new vscode.LanguageModelToolResult([
       new vscode.LanguageModelTextPart(metadata),
-      new vscode.LanguageModelTextPart(dataUrl),
+      vscode.LanguageModelDataPart.image(data, mimeType),
     ]);
   }
 }
@@ -161,11 +159,9 @@ export class ImgFromBase64Tool
       source: 'base64',
     });
 
-    const dataUrl = `data:${mimeType};base64,${data.toString('base64')}`;
-
     return new vscode.LanguageModelToolResult([
       new vscode.LanguageModelTextPart(metadata),
-      new vscode.LanguageModelTextPart(dataUrl),
+      vscode.LanguageModelDataPart.image(data, mimeType),
     ]);
   }
 }
@@ -211,11 +207,9 @@ export class ImgFromUrlTool implements vscode.LanguageModelTool<ImgFromUrlInput>
       source: 'url',
     });
 
-    const dataUrl = `data:${mimeType};base64,${data.toString('base64')}`;
-
     return new vscode.LanguageModelToolResult([
       new vscode.LanguageModelTextPart(metadata),
-      new vscode.LanguageModelTextPart(dataUrl),
+      vscode.LanguageModelDataPart.image(data, mimeType),
     ]);
   }
 
