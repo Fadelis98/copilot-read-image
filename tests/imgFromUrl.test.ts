@@ -13,6 +13,17 @@ jest.mock(
         this.value = value;
       }
     },
+    LanguageModelDataPart: class {
+      data: Uint8Array;
+      mimeType: string;
+      constructor(data: Uint8Array, mimeType: string) {
+        this.data = data;
+        this.mimeType = mimeType;
+      }
+      static image(data: Uint8Array, mimeType: string) {
+        return new this(data, mimeType);
+      }
+    },
   }),
   { virtual: true }
 );
@@ -24,18 +35,6 @@ import { EventEmitter } from 'events';
 import * as http from 'http';
 import * as https from 'https';
 import { ImgFromUrlTool } from '../src/tools';
-
-function parseDataUrl(value: string): { mimeType: string; data: Buffer } {
-  const match = value.match(/^data:([^;]+);base64,(.+)$/s);
-  if (!match) {
-    throw new Error('Expected data URL text part');
-  }
-
-  return {
-    mimeType: match[1],
-    data: Buffer.from(match[2], 'base64'),
-  };
-}
 
 function createMockReq() {
   const req = new EventEmitter() as EventEmitter & {
@@ -113,7 +112,7 @@ describe('ImgFromUrlTool', () => {
     jest.resetAllMocks();
   });
 
-  it('fetches PNG image and returns metadata + data URL text part', async () => {
+  it('fetches PNG image and returns metadata + image data part', async () => {
     setupGet(https.get as jest.Mock, {
       statusCode: 200,
       headers: { 'content-type': 'image/png' },
@@ -133,9 +132,9 @@ describe('ImgFromUrlTool', () => {
     expect(meta.size).toBe(pngBytes.length);
     expect(meta.source).toBe('url');
 
-    const dataPart = parseDataUrl((result.content[1] as { value: string }).value);
+    const dataPart = result.content[1] as { data: Uint8Array; mimeType: string };
     expect(dataPart.mimeType).toBe('image/png');
-    expect(dataPart.data).toEqual(pngBytes);
+    expect(Buffer.from(dataPart.data)).toEqual(pngBytes);
   });
 
   it('uses Content-Type header MIME when supported', async () => {
@@ -150,7 +149,7 @@ describe('ImgFromUrlTool', () => {
       fakeToken
     );
 
-    const dataPart = parseDataUrl((result.content[1] as { value: string }).value);
+    const dataPart = result.content[1] as { data: Uint8Array; mimeType: string };
     expect(dataPart.mimeType).toBe('image/jpeg');
   });
 
@@ -166,7 +165,7 @@ describe('ImgFromUrlTool', () => {
       fakeToken
     );
 
-    const dataPart = parseDataUrl((result.content[1] as { value: string }).value);
+    const dataPart = result.content[1] as { data: Uint8Array; mimeType: string };
     expect(dataPart.mimeType).toBe('image/png');
   });
 
@@ -182,7 +181,7 @@ describe('ImgFromUrlTool', () => {
       fakeToken
     );
 
-    const dataPart = parseDataUrl((result.content[1] as { value: string }).value);
+    const dataPart = result.content[1] as { data: Uint8Array; mimeType: string };
     expect(dataPart.mimeType).toBe('image/jpeg');
   });
 
@@ -202,7 +201,7 @@ describe('ImgFromUrlTool', () => {
       fakeToken
     );
 
-    const dataPart = parseDataUrl((result.content[1] as { value: string }).value);
+    const dataPart = result.content[1] as { data: Uint8Array; mimeType: string };
     expect(dataPart.mimeType).toBe('image/png');
   });
 
