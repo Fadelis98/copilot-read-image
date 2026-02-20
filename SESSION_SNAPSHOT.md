@@ -92,11 +92,11 @@ copilot-read-image/
    - 理解项目结构
    - 了解进行中的工作
 
-2. **快速读取关键文件** (如果需要继续Agent工作)
-   - AGENT_MANAGEMENT.md → 👈 **继续管理Copilot Agent的指南**
-   - DEVELOPMENT_PLAN.md → 了解全局计划
-   - SYSTEM_STATUS.md → 了解当前进度
-   - 本文件(SESSION_SNAPSHOT.md) → 了解最新状态
+2. **快速读取关键文件** (根据任务选择)
+   - **监督Agent工作**: AGENT_MANAGEMENT.md → PR审查和合并
+   - **本地测试扩展**: LOCAL_TESTING_GUIDE.md → 使用F5调试运行
+   - **了解全局计划**: DEVELOPMENT_PLAN.md → 5阶段路线图
+   - **检查系统状态**: SYSTEM_STATUS.md → 当前进度
 
 3. **检查GitHub状态**
    ```bash
@@ -112,9 +112,14 @@ copilot-read-image/
    npm run lint           # 验证代码质量
    ```
 
-### 如果要继续处理Agent工作 (PR #7审查和合并)：
+### 选择您的任务类型：
+
+**🤖 如果要继续处理Agent工作 (PR #7审查和合并)**：
 - 参考 [AGENT_MANAGEMENT.md](AGENT_MANAGEMENT.md)
-- 该文件包含PR审查清单、合并流程、问题排查
+
+**🔬 如果要本地测试扩展功能**：
+- 按 **F5** 启动Extension Development Host
+- 参考 [LOCAL_TESTING_GUIDE.md](LOCAL_TESTING_GUIDE.md) 详细指南
 
 ---
 

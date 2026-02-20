@@ -212,7 +212,58 @@ git commit -m "docs: update session snapshot - Phase 1 complete"
 
 ---
 
-## 🔄 分配下一个任务给Agent的步骤
+## � 本地测试和调试 (Agent在开发时使用)
+
+### 在提交PR之前，Agent应该在本地测试
+
+If Agent is working on Phase 1 (extension development), they should verify the implementation locally before submitting PR:
+
+```bash
+# 步骤1: 构建项目
+npm run build
+
+# 步骤2: 启动本地调试
+# 在VS Code中按F5
+# 或运行: code --extensionDevelopmentPath=.
+# 这会打开一个新的VS Code窗口，已加载扩展
+
+# 步骤3: 在新窗口中测试
+# - 打开Copilot Chat
+# - 确认三个工具可见
+# - 测试工具是否可调用
+# - 检查返回的数据格式
+
+# 步骤4: 验证代码质量
+npm test
+npm run lint
+npm run format:check
+```
+
+### 快速启动调试 (F5)
+当在本地开发时，最快的流程：
+
+```bash
+# 终端 1: 启动TypeScript监听编译
+npm run build:watch
+
+# 然后在VS Code中按 F5
+# → 自动启动Extension Development Host
+# → 加载您的最新代码
+# → 可以设置断点进行调试
+
+# 修改代码后：
+# → build:watch自动重新编译
+# → 在Development Host中按 Ctrl+R 重新加载扩展
+```
+
+### 参考文档
+详见 [LOCAL_TESTING_GUIDE.md](LOCAL_TESTING_GUIDE.md)：
+- 详细的F5启动指南
+- 如何使用Copilot Chat测试工具
+- 设置断点调试工具代码
+- 常见问题和解决方案
+
+---
 
 ### 当Phase 1完成后，分配Phase 2:
 

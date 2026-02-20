@@ -365,8 +365,17 @@ npm run build:watch       # 监视模式构建
 ### 调试扩展 (Phase 1之后)
 ```bash
 # 在VS Code中按F5启动扩展调试主机
-# 或: npm run debug
+# 会自动打开一个新的VS Code窗口（Extension Development Host）
+# 参考 LOCAL_TESTING_GUIDE.md 获取详细说明
 ```
+
+### 本地测试（学习参考）
+参考 [LOCAL_TESTING_GUIDE.md](LOCAL_TESTING_GUIDE.md)：
+- 如何在VS Code中运行和调试扩展
+- F5快速启动调试流程
+- 使用Copilot Chat测试工具
+- 设置断点调试
+- 常见问题排查
 
 ### 创建版本发布
 ```bash
