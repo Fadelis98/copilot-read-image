@@ -1,7 +1,7 @@
 {
   "name": "copilot-read-image",
   "displayName": "Copilot Image Reader",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A VS Code extension that provides GitHub Copilot with image reading capabilities through registered language model tools",
   "publisher": "fadelis98",
   "main": "dist/extension.js",
