@@ -92,7 +92,8 @@ copilot-read-image/
    - 理解项目结构
    - 了解进行中的工作
 
-2. **快速读取关键文件**
+2. **快速读取关键文件** (如果需要继续Agent工作)
+   - AGENT_MANAGEMENT.md → 👈 **继续管理Copilot Agent的指南**
    - DEVELOPMENT_PLAN.md → 了解全局计划
    - SYSTEM_STATUS.md → 了解当前进度
    - 本文件(SESSION_SNAPSHOT.md) → 了解最新状态
@@ -110,6 +111,10 @@ copilot-read-image/
    npm run build          # 验证构建成功
    npm run lint           # 验证代码质量
    ```
+
+### 如果要继续处理Agent工作 (PR #7审查和合并)：
+- 参考 [AGENT_MANAGEMENT.md](AGENT_MANAGEMENT.md)
+- 该文件包含PR审查清单、合并流程、问题排查
 
 ---
 

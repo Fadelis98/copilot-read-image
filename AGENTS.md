@@ -74,6 +74,13 @@ Enable GitHub Copilot to analyze images directly within chat workflows by provid
   - 快速记忆助手
   - 关键链接和命令
 
+**🤖 继续处理Agent工作 (如果在管理Copilot PR)**:
+- [AGENT_MANAGEMENT.md](AGENT_MANAGEMENT.md) - Agent工作管理和审查指南
+  - PR状态检查
+  - 代码审查清单
+  - 合并流程
+  - 问题排查
+
 **必读文档 (Start Here)**:
 - [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) - 5阶段开发路线图
 - [SYSTEM_STATUS.md](SYSTEM_STATUS.md) - 系统当前状态概览
