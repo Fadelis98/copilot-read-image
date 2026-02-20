@@ -1,76 +1,61 @@
-# copilot-read-image
+# Copilot Image Reader / Copilot 图像读取器
 
-A VS Code extension that provides GitHub Copilot with image reading and analysis capabilities through registered Language Model Tools.
+English: A VS Code extension that gives GitHub Copilot image input tools for local files, base64 strings, and remote URLs.
 
-## Features
+中文：一个 VS Code 扩展，为 GitHub Copilot 提供图片输入能力，支持本地文件、Base64 字符串和远程 URL。
 
-- **`readImageFromPath`** – Read an image from a local file path and pass it to Copilot for analysis
-- **`imgFromBase64`** – Decode a base64-encoded image string and pass it to Copilot
-- **`imgFromUrl`** – Fetch an image from a remote URL and pass it to Copilot
+## Features / 功能
 
-All tools return image data in a format compatible with Vision Language Models (VLMs).
+- `readImageFromPath`: Read a local image file for Copilot analysis / 读取本地图片供 Copilot 分析
+- `imgFromBase64`: Decode base64 image input / 解码 base64 图片数据
+- `imgFromUrl`: Fetch an image from an HTTP(S) URL / 从 HTTP(S) 地址拉取图片
+- VLM-compatible data output / 输出兼容视觉模型（VLM）的数据格式
 
-## Requirements
+## Requirements / 环境要求
 
-- VS Code >= 1.95.0
-- Node.js >= 18
-- GitHub Copilot with vision support
+- VS Code `>= 1.95.0`
+- Node.js `>= 18`
+- GitHub Copilot (vision-capable plan/model recommended)
 
-## Development
+## Install / 安装
+
+### From VSIX / 通过 VSIX 安装
 
 ```bash
-# Install dependencies
 npm ci
-
-# Build
 npm run build
+npm run package:vsix
+```
 
-# Run tests
+Then in VS Code: **Extensions: Install from VSIX...**
+
+然后在 VS Code 中执行：**Extensions: Install from VSIX...**
+
+## Usage / 使用方式
+
+In Copilot Chat, ask for image analysis and provide one of these inputs:
+
+在 Copilot Chat 中让 Copilot 分析图片，并提供以下任一输入：
+
+- File path / 文件路径: `readImageFromPath`
+- Base64 image / Base64 图片: `imgFromBase64`
+- URL / 图片链接: `imgFromUrl`
+
+## Security Notes / 安全说明
+
+- `imgFromUrl` blocks localhost and private network ranges / 会阻止 localhost 与私网地址
+- Download size limit is enforced / 有下载大小限制
+- Redirect loops and timeout are handled / 包含重定向与超时保护
+
+## For Developers / 开发者
+
+```bash
+npm ci
+npm run build
 npm test
-
-# Lint
 npm run lint
-
-# Format
-npm run format
 ```
 
-## Debugging the Extension
-
-Press **F5** in VS Code to launch the Extension Development Host. Then open Copilot Chat and use the tools directly.
-
-See [LOCAL_TESTING_GUIDE.md](LOCAL_TESTING_GUIDE.md) for detailed debugging instructions.
-
-## Project Structure
-
-```
-copilot-read-image/
-├── src/
-│   ├── extension.ts      # VS Code extension entry point (activate/deactivate)
-│   ├── tools/
-│   │   └── index.ts      # Three language model tool implementations
-│   └── index.ts          # Legacy image utility (readImage, detectFormat)
-├── tests/
-│   └── index.test.ts     # Unit tests
-├── .github/
-│   ├── workflows/        # GitHub Actions CI
-│   └── PULL_REQUEST_TEMPLATE.md
-├── scripts/
-│   ├── pr-manager.sh     # PR monitoring script
-│   └── version-bump.sh   # Version management script
-└── package.json          # Extension manifest + dependencies
-```
-
-## Development Status
-
-| Phase | Description | Status |
-|-------|-------------|--------|
-| Phase 1 | VS Code extension architecture | ✅ Complete |
-| Phase 2 | Tool implementations (readImageFromPath, imgFromBase64, imgFromUrl) | 🟡 In Progress |
-| Phase 3 | VLM integration & validation | ⏳ Blocked on Phase 2 |
-
-See [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) for the full roadmap.
-
-## License
+## License / 许可证
 
 MIT

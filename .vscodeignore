@@ -8,6 +8,15 @@ out/
 *.vsix
 src/
 tests/
+scripts/
+AGENTS.md
+AGENT_AUTONOMOUS_WORKFLOW.md
+AGENT_AUTO_MERGE_GUIDE.md
+DEVELOPMENT_PLAN.md
+LOCAL_TESTING_GUIDE.md
+MERGE_CHECKLIST.md
+SESSION_SNAPSHOT.md
+.github/
 *.map
 tsconfig*.json
 eslint.config.mjs

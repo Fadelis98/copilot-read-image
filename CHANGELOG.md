@@ -2,6 +2,17 @@
 
 All notable changes to the "copilot-read-image" extension will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Phase 5 packaging workflow scripts:
+  - `vscode:prepublish` for pre-package TypeScript build
+  - `package:vsix` for generating extension `.vsix` via `@vscode/vsce`
+
+### Changed
+- README development status updated to reflect Phase 2 and Phase 3 completion
+- README now includes VSIX packaging and local installation instructions
+
 ## [0.2.0] - 2026-02-20
 
 ### Added

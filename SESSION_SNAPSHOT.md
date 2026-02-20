@@ -28,15 +28,27 @@
   - 使用命名空间工具 ID（copilot-read-image_*）匹配官方示例
   - 改用标准 LanguageModelTextPart 返回 data URL 格式
   - 所有工具现在完全兼容 VS Code LM API
+- **Phase 3 质量基线补强**（2026-02-20，本地进行中）
+  - `src/extension.ts` 移除 `console.*`，统一改为 `OutputChannel` 日志
+  - 新增 `tests/extension.test.ts`，覆盖工具注册与 `vscode.lm` 不可用降级路径
+  - 当前验证：`npm run build` / `npm test` / `npm run lint` 全部通过
+- **Phase 3 手工验收完成**（2026-02-20，F5 调试窗口验证）
+  - 在 Extension Development Host 中验证 Copilot 可正确读取图片
+  - Copilot Chat 工具发现与调用流程通过
+  - Phase 3（VLM 集成与兼容验证）完成，进入下一阶段准备
+- **Phase 5 打包链路完成验证**（2026-02-20，本地）
+  - 新增 `vscode:prepublish` / `package:vsix` 脚本并补齐仓库元数据
+  - 成功生成 `copilot-read-image-0.2.0.vsix`
+  - 优化 `.vscodeignore` 后包体从 55.61 KB 精简到 18.26 KB（18 files）
 
-### 🟡 待处理（Phase 3 - VLM 集成）
+### 🟡 待处理（Phase 4/5 - 收尾与发布）
 
 | Issue | 工具 | 优先级 | 状态 |
 |-------|------|--------|------|
 | [#3](https://github.com/Fadelis98/copilot-read-image/issues/3) | `readImageFromPath` | 🔴 HIGH | ✅ 已完成（PR #8 已合并） |
 | [#5](https://github.com/Fadelis98/copilot-read-image/issues/5) | `imgFromBase64` | 🟡 MEDIUM | ✅ 已完成（PR #9 已合并） |
 | [#4](https://github.com/Fadelis98/copilot-read-image/issues/4) | `imgFromUrl` | 🟡 MEDIUM | ✅ 已关闭（本地实现 d097b57） |
-| [#6](https://github.com/Fadelis98/copilot-read-image/issues/6) | VLM 集成 | 🔄 进行中 | Phase 3 当前主线 |
+| [#6](https://github.com/Fadelis98/copilot-read-image/issues/6) | VLM 集成 | ✅ 已完成 | 手工验证通过，待同步 issue 状态 |
 
 ---
 
@@ -82,8 +94,8 @@ npm ci && npm run build && npm test && npm run lint
 - 新增测试：`tests/imgFromUrl.test.ts`
 
 ### 📋 下一步
-1. 执行 Issue #6：统一工具结果格式与 VLM 兼容验证
-2. 增补集成测试与手工验证流程（Extension Host + Copilot Chat）
+1. 同步 GitHub Issue #6 状态（关闭或转为已完成）
+2. 推进 Phase 5：发布准备（Marketplace 元数据与发布流程）
 
 ---
 
@@ -114,12 +126,12 @@ npm ci && npm run build && npm test && npm run lint
 
 ## 📌 Status
 
-- **当前阶段**: Phase 3 - VLM 集成与验证（进行中）
-- **下一个里程碑**: 完成 Issue #6 的兼容性与集成测试闭环
+- **当前阶段**: ✅ Phase 3 完成（VLM 集成与验证）
+- **下一个里程碑**: Phase 5 发布准备与分发
 - **已合并 PR**: #7（扩展架构）、#8（readImageFromPath）、#9（imgFromBase64）
 - **开放 Issues**: #6（VLM 集成）
-- **测试状态**: ✅ 47/47 tests passed
-- **最后提交**: d097b57 (feat(tools): implement imgFromUrl with SSRF-safe fetching)
+- **测试状态**: ✅ 50/50 tests passed
+- **最后提交**: d5df512 (docs: close issue #4 and switch snapshot to phase 3 focus)
 
 ---
 
@@ -137,4 +149,4 @@ npm ci && npm run build && npm test && npm run lint
 ---
 
 **Updated**: 2026-02-20  
-**Status**: ✅ Phase 1 Complete | ✅ Phase 2 Complete (all tools implemented locally) | ⏭️ Ready for Phase 3
+**Status**: ✅ Phase 1 Complete | ✅ Phase 2 Complete | ✅ Phase 3 Complete | 🟡 Phase 5 In Progress (VSIX packaged)

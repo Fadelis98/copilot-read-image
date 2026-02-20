@@ -3,6 +3,7 @@ node_modules/
 
 # Build output
 dist/
+*.vsix
 
 # Test coverage
 coverage/

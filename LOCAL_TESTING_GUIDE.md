@@ -8,6 +8,24 @@ VS Code提供**Extension Development Host**机制，允许您在隔离的VS Code
 
 ---
 
+## ✅ 最新手工验证记录（2026-02-20）
+
+**验证环境**:
+- 启动方式：F5（Extension Development Host）
+- 测试窗口：Development Host + Copilot Chat
+
+**验证结果**:
+- Copilot 能正确发现并调用本扩展提供的图像工具
+- Copilot 可以正确读取图片并完成分析流程
+- 结论：Phase 3（VLM 集成与兼容验证）手工验收通过
+
+**配套质量检查**:
+- `npm run build` 通过
+- `npm test` 通过
+- `npm run lint` 通过
+
+---
+
 ## 🚀 快速开始 - 5分钟启动本地测试
 
 ### 前提条件
