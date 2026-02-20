@@ -4,6 +4,16 @@ All notable changes to the "copilot-read-image" extension will be documented in 
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-02-21
+
+### Changed
+- Language model tool outputs now use native `LanguageModelDataPart.image(...)` instead of embedding image payloads as base64 text data URLs
+- Updated VS Code API baseline to support native image data parts:
+  - `engines.vscode` -> `^1.109.0`
+  - `@types/vscode` -> `^1.109.0`
+- Updated tool tests to validate image data-part behavior
+- Refined README wording and layout, including dev-branch-first contributor guidance
+
 ### Added
 - Phase 5 packaging workflow scripts:
   - `vscode:prepublish` for pre-package TypeScript build
