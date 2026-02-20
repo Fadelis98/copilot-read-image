@@ -13,13 +13,23 @@
   - `src/tools/index.ts` - 三个工具的占位符实现（待 Phase 2 填充）
   - `package.json` - 扩展清单，含 `contributes.languageModelTools`
   - GitHub Actions CI、PR 模板、Issue 模板、脚本工具
+- **Phase 2.1**: `readImageFromPath` 工具实现完成（PR #8 已合并，Issue #3 已关闭）
+  - 本地文件读取，magic-byte MIME 检测（PNG/JPEG/GIF/WebP/BMP）
+  - 路径遍历保护、50MB 文件大小限制、完整错误处理
+  - 8 个测试用例，全部通过（16 tests total）
+- **Phase 2.2**: `imgFromBase64` 工具实现完成（PR #9 已合并，Issue #5 已关闭）
+  - Base64 解码（标准和 URL-safe 编码）
+  - Data URI 前缀解析和 MIME 类型提取
+  - MIME 类型优先级：data URI > 显式参数 > 自动检测 > 默认值
+  - 支持 PNG/JPEG/GIF/WebP/BMP/SVG+XML
+  - 16 个测试用例，全部通过（32 tests total）
 
 ### 🟡 待处理（Phase 2 - 工具实现）
 
 | Issue | 工具 | 优先级 | 状态 |
 |-------|------|--------|------|
-| [#3](https://github.com/Fadelis98/copilot-read-image/issues/3) | `readImageFromPath` | 🔴 HIGH | 🤖 远程 Agent 开发中 → [PR #8](https://github.com/Fadelis98/copilot-read-image/pull/8) |
-| [#5](https://github.com/Fadelis98/copilot-read-image/issues/5) | `imgFromBase64` | 🟡 MEDIUM | 待分配 |
+| [#3](https://github.com/Fadelis98/copilot-read-image/issues/3) | `readImageFromPath` | 🔴 HIGH | ✅ 已完成（PR #8 已合并） |
+| [#5](https://github.com/Fadelis98/copilot-read-image/issues/5) | `imgFromBase64` | 🟡 MEDIUM | ✅ 已完成（PR #9 已合并） |
 | [#4](https://github.com/Fadelis98/copilot-read-image/issues/4) | `imgFromUrl` | 🟡 MEDIUM | 待分配 |
 | [#6](https://github.com/Fadelis98/copilot-read-image/issues/6) | VLM 集成 | ⏳ Blocked | 等待 Phase 2 |
 
@@ -54,34 +64,33 @@ npm ci && npm run build && npm test && npm run lint
 
 ## 🎯 当前行动项
 
-### ⏳ PR #8 待审查（Issue #3 - readImageFromPath）
+### 下一步：分配 Issue #4（imgFromUrl）
 
-远程 Agent 正在开发 [PR #8](https://github.com/Fadelis98/copilot-read-image/pull/8)。
-
-**等待 PR 完成后，执行审查流程**（参考 [AGENT_AUTO_MERGE_GUIDE.md](AGENT_AUTO_MERGE_GUIDE.md)）：
+Phase 2 还剩最后一个工具需要实现。准备分配给远程 Agent：
 
 ```bash
-# 检查 PR 状态和 CI
-gh pr checks 8
-gh pr view 8
-
-# 本地验证
-git fetch origin pull/8/head:pr-8
-git checkout pr-8
-npm ci && npm run build && npm test && npm run lint
+# 使用 MCP 工具分配 issue
+mcp_io_github_git_assign_copilot_to_issue(
+  owner: "Fadelis98",
+  repo: "copilot-read-image",
+  issueNumber: 4
+)
 ```
 
-**审查重点**（已通过 custom_instructions 告知远程 Agent）：
-- 输入字段名必须是 `imagePath`（与 `package.json` inputSchema 一致，不是 `filePath`）
-- 复用 `src/index.ts` 中的 `detectFormat()` 逻辑
-- 图像数据：`new vscode.LanguageModelDataPart(buffer, mimeType)`（构造函数，非静态方法）
-- 测试文件：`tests/readImageFromPath.test.ts`，覆盖率 >= 80%
-- `CHANGELOG.md` 已更新
+**Issue #4 要点**（提前准备的补充说明）：
+- 输入字段：`url: string`（见 `ImgFromUrlInput` 接口）
+- 使用 `https` 或 `node:https` 模块（Node.js 内置，无需新依赖）
+- 支持 HTTP/HTTPS，处理 30x 重定向（最多 5 次）
+- 验证 Content-Type 是否为图像类型
+- 50MB 响应大小限制
+- 超时设置（建议 30 秒）
+- 返回格式与前两个工具一致（`ImageDataPart` + metadata）
+- 测试文件：`tests/imgFromUrl.test.ts`，覆盖率 >= 80%
+- CHANGELOG.md 更新
 
-### 📋 后续（PR #8 合并后）
-1. 分配 Issue #5（`imgFromBase64`）给远程 Agent
-2. 分配 Issue #4（`imgFromUrl`）给远程 Agent
-3. 两个 PR 合并后，分配 Issue #6（VLM 集成）
+### 📋 后续（Issue #4 完成后）
+1. Phase 2 完成 → 分配 Issue #6（VLM 集成和验证）
+2. Phase 3 完成 → 发布 v0.3.0
 
 ---
 
@@ -110,7 +119,18 @@ npm ci && npm run build && npm test && npm run lint
 
 ---
 
-## 🔗 文档索引
+## � Status
+
+- **当前阶段**: Phase 2 - 工具实现（2/3 完成）
+- **下一个里程碑**: 完成 Issue #4（imgFromUrl）→ Phase 2 完成
+- **已合并 PR**: #7（扩展架构）、#8（readImageFromPath）、#9（imgFromBase64）
+- **开放 Issues**: #4（imgFromUrl）、#6（VLM 集成）
+- **测试状态**: ✅ 32/32 tests passed
+- **最后提交**: ed30311 (feat(tools): implement ImgFromBase64Tool)
+
+---
+
+## �🔗 文档索引
 
 | 文档 | 用途 |
 |------|------|
@@ -124,4 +144,4 @@ npm ci && npm run build && npm test && npm run lint
 ---
 
 **Updated**: 2026-02-20  
-**Status**: ✅ Phase 1 Complete | � Phase 2 In Progress — PR #8 open (Issue #3 readImageFromPath)
+**Status**: ✅ Phase 1 Complete | 🟡 Phase 2 In Progress — Issue #3 ✅ merged | PR #9 open (Issue #5 imgFromBase64)
