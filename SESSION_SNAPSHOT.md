@@ -29,14 +29,14 @@
   - 改用标准 LanguageModelTextPart 返回 data URL 格式
   - 所有工具现在完全兼容 VS Code LM API
 
-### 🟡 待处理（Phase 2 - 工具实现）
+### 🟡 待处理（Phase 3 - VLM 集成）
 
 | Issue | 工具 | 优先级 | 状态 |
 |-------|------|--------|------|
 | [#3](https://github.com/Fadelis98/copilot-read-image/issues/3) | `readImageFromPath` | 🔴 HIGH | ✅ 已完成（PR #8 已合并） |
 | [#5](https://github.com/Fadelis98/copilot-read-image/issues/5) | `imgFromBase64` | 🟡 MEDIUM | ✅ 已完成（PR #9 已合并） |
-| [#4](https://github.com/Fadelis98/copilot-read-image/issues/4) | `imgFromUrl` | 🟡 MEDIUM | ✅ 已完成（本地实现待提交） |
-| [#6](https://github.com/Fadelis98/copilot-read-image/issues/6) | VLM 集成 | ⏳ Blocked | 等待 Phase 2 |
+| [#4](https://github.com/Fadelis98/copilot-read-image/issues/4) | `imgFromUrl` | 🟡 MEDIUM | ✅ 已关闭（本地实现 d097b57） |
+| [#6](https://github.com/Fadelis98/copilot-read-image/issues/6) | VLM 集成 | 🔄 进行中 | Phase 3 当前主线 |
 
 ---
 
@@ -82,8 +82,8 @@ npm ci && npm run build && npm test && npm run lint
 - 新增测试：`tests/imgFromUrl.test.ts`
 
 ### 📋 下一步
-1. 合并并关闭 Issue #4（Phase 2 全部完成）
-2. 开始 Issue #6（VLM 集成和验证）→ Phase 3
+1. 执行 Issue #6：统一工具结果格式与 VLM 兼容验证
+2. 增补集成测试与手工验证流程（Extension Host + Copilot Chat）
 
 ---
 
@@ -112,14 +112,14 @@ npm ci && npm run build && npm test && npm run lint
 
 ---
 
-## � Status
+## 📌 Status
 
-- **当前阶段**: Phase 2 - 工具实现（3/3 完成，待提交）
-- **下一个里程碑**: 开始 Issue #6（VLM 集成）→ Phase 3
+- **当前阶段**: Phase 3 - VLM 集成与验证（进行中）
+- **下一个里程碑**: 完成 Issue #6 的兼容性与集成测试闭环
 - **已合并 PR**: #7（扩展架构）、#8（readImageFromPath）、#9（imgFromBase64）
-- **开放 Issues**: #4（imgFromUrl）、#6（VLM 集成）
+- **开放 Issues**: #6（VLM 集成）
 - **测试状态**: ✅ 47/47 tests passed
-- **最后提交**: d6c94b5 (fix(tools): resolve 'Unknown LanguageModelToolResult part type' error)
+- **最后提交**: d097b57 (feat(tools): implement imgFromUrl with SSRF-safe fetching)
 
 ---
 
