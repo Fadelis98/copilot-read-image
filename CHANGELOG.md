@@ -19,6 +19,13 @@ All notable changes to the "copilot-read-image" extension will be documented in 
   - Path traversal protection: relative paths are validated against the working directory
   - File size limit: rejects files larger than 50 MB
   - Graceful error handling for missing files, unsupported formats, and permission errors
+- Full implementation of `imgFromBase64` tool:
+  - Decodes base64-encoded image strings (standard and URL-safe encoding)
+  - Strips `data:image/...;base64,` URI prefix and extracts MIME type automatically
+  - MIME type priority: data URI > explicit parameter > magic-byte auto-detection > `image/png` default
+  - Supports PNG, JPEG, GIF, WebP, BMP, SVG+XML
+  - Size limit: rejects decoded data larger than 50 MB
+  - Graceful error handling for invalid base64, unsupported MIME types, and empty input
 
 ## [0.1.0] - Initial Release
 
