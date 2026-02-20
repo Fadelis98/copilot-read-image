@@ -9,6 +9,45 @@ This file is automatically loaded when agents enter this project directory.
 
 ---
 
+## ⚡ 快速开始 - 5分钟恢复工作状态
+
+**🔴 刚刚进入新对话？按这个顺序做：**
+
+1. **📸 查看最新工作快照** (30秒)
+   ```bash
+   # 阅读SESSION_SNAPSHOT.md - 了解当前进度、活跃PR、待做任务
+   cat SESSION_SNAPSHOT.md
+   ```
+
+2. **🗺️ 查看全局计划** (1分钟)
+   ```bash
+   # 查看DEVELOPMENT_PLAN.md中相关阶段的细节
+   head -100 DEVELOPMENT_PLAN.md
+   ```
+
+3. **📊 检查GitHub实时状态** (1分钟)
+   ```bash
+   # 查看最近提交
+   git log --oneline | head -5
+   
+   # 查看所有开放的Copilot PR
+   gh pr list --creator=Copilot --state=open
+   
+   # 查看开放的issues
+   gh issue list --state=open
+   ```
+
+4. **✅ 验证本地环境** (2分钟)
+   ```bash
+   npm test
+   npm run build
+   npm run lint
+   ```
+
+**✨ 完成！你现在完全恢复了上下文，可以继续工作。** 🚀
+
+---
+
 ## 🎯 项目概述
 
 **项目名称**: copilot-read-image  
@@ -27,6 +66,13 @@ Enable GitHub Copilot to analyze images directly within chat workflows by provid
 ---
 
 ## 📚 重要文档速查
+
+**⭐ 跨对话状态恢复 (New Conversation?)**:
+- [SESSION_SNAPSHOT.md](SESSION_SNAPSHOT.md) - 最新工作状态快照 **← 新对话从这里开始**
+  - 当前进度
+  - 活跃PR和Issues
+  - 快速记忆助手
+  - 关键链接和命令
 
 **必读文档 (Start Here)**:
 - [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) - 5阶段开发路线图
