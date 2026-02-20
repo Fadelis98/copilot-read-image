@@ -30,7 +30,7 @@
 |-------|------|--------|------|
 | [#3](https://github.com/Fadelis98/copilot-read-image/issues/3) | `readImageFromPath` | 🔴 HIGH | ✅ 已完成（PR #8 已合并） |
 | [#5](https://github.com/Fadelis98/copilot-read-image/issues/5) | `imgFromBase64` | 🟡 MEDIUM | ✅ 已完成（PR #9 已合并） |
-| [#4](https://github.com/Fadelis98/copilot-read-image/issues/4) | `imgFromUrl` | 🟡 MEDIUM | 待分配 |
+| [#4](https://github.com/Fadelis98/copilot-read-image/issues/4) | `imgFromUrl` | 🟡 MEDIUM | 🤖 远程 Agent 开发中 → [PR #10](https://github.com/Fadelis98/copilot-read-image/pull/10) |
 | [#6](https://github.com/Fadelis98/copilot-read-image/issues/6) | VLM 集成 | ⏳ Blocked | 等待 Phase 2 |
 
 ---
@@ -64,33 +64,37 @@ npm ci && npm run build && npm test && npm run lint
 
 ## 🎯 当前行动项
 
-### 下一步：分配 Issue #4（imgFromUrl）
+### ⏳ PR #10 待审查（Issue #4 - imgFromUrl）
 
-Phase 2 还剩最后一个工具需要实现。准备分配给远程 Agent：
+远程 Agent 正在开发 [PR #10](https://github.com/Fadelis98/copilot-read-image/pull/10)。
+
+**等待 PR 完成后，执行审查流程**（参考 [AGENT_AUTO_MERGE_GUIDE.md](AGENT_AUTO_MERGE_GUIDE.md)）：
 
 ```bash
-# 使用 MCP 工具分配 issue
-mcp_io_github_git_assign_copilot_to_issue(
-  owner: "Fadelis98",
-  repo: "copilot-read-image",
-  issueNumber: 4
-)
+# 检查 PR 状态和 CI
+gh pr checks 10
+gh pr view 10
+
+# 本地验证
+git fetch origin pull/10/head:pr-10
+git checkout pr-10
+npm ci && npm run build && npm test && npm run lint
 ```
 
-**Issue #4 要点**（提前准备的补充说明）：
-- 输入字段：`url: string`（见 `ImgFromUrlInput` 接口）
-- 使用 `https` 或 `node:https` 模块（Node.js 内置，无需新依赖）
-- 支持 HTTP/HTTPS，处理 30x 重定向（最多 5 次）
-- 验证 Content-Type 是否为图像类型
-- 50MB 响应大小限制
-- 超时设置（建议 30 秒）
-- 返回格式与前两个工具一致（`ImageDataPart` + metadata）
+**审查重点**（已通过 custom_instructions 告知远程 Agent）：
+- 输入字段名必须是 `url`（与现有 `ImgFromUrlInput` 接口一致）
+- 使用 Node.js 内置 `https`/`http` 模块（不引入新依赖）
+- SSRF 防护：阻止 localhost 和私有 IP 地址段
+- 支持 HTTP/HTTPS 重定向（最多 5 跳，检测循环）
+- 50MB 大小限制，30s 超时
+- MIME 类型检测：Content-Type 头 → magic bytes 自动检测
+- 返回格式与前两个工具一致（`ImageDataPart` 模式）
 - 测试文件：`tests/imgFromUrl.test.ts`，覆盖率 >= 80%
-- CHANGELOG.md 更新
+- `CHANGELOG.md` 已更新
 
-### 📋 后续（Issue #4 完成后）
-1. Phase 2 完成 → 分配 Issue #6（VLM 集成和验证）
-2. Phase 3 完成 → 发布 v0.3.0
+### 📋 后续（PR #10 合并后）
+1. Phase 2 完成！所有三个工具实现完毕
+2. 分配 Issue #6（VLM 集成和验证）→ Phase 3 开始
 
 ---
 
