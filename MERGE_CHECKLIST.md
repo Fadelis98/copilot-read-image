@@ -1,10 +1,12 @@
 # PR 合并前检查清单
 
-This checklist is used to validate Copilot PRs before merging into main branch.
+**模式**: 🤖 **完全自动化** - Agent 使用 GitHub MCP 工具自动验证所有项
 
-## 📋 自动检查项 (Automated)
+This checklist is automatically validated by Copilot Agent before merging PRs.
 
-通过GitHub Actions自动验证：
+## 📋 自动检查项 (Automated via GitHub Actions)
+
+通过 GitHub Actions 自动验证：
 
 - [ ] ✅ Build passes: `npm run build`
 - [ ] ✅ Linting passes: `npm run lint`
@@ -13,9 +15,9 @@ This checklist is used to validate Copilot PRs before merging into main branch.
 - [ ] ✅ No merge conflicts
 - [ ] ✅ Branch is up-to-date with main
 
-## 🤔 代码审查 (Code Review)
+## 🤖 Agent 自动代码审查
 
-由主要贡献者手动审查：
+**Agent 使用 `mcp_io_github_git_pull_request_read` 读取 PR 并自动验证：**
 
 ### 功能实现
 - [ ] 代码实现了issue中指定的所有要求
@@ -60,15 +62,15 @@ This checklist is used to validate Copilot PRs before merging into main branch.
 - [ ] Commit历史逻辑清晰（不都是"fix"或"update"）
 - [ ] 没有大的二进制文件被意外提交
 
-## 🔍 功能测试 (Functional Testing)
+## 🔍 功能测试 (Automated Testing)
 
-在合并前进行手动测试：
+**通过自动化测试验证（无需人工）：**
 
-- [ ] 在本地检出代码并构建成功
-- [ ] 所有声明的特性正确工作
-- [ ] 没有regression（现有功能仍正常）
-- [ ] 错误消息清晰有帮助
-- [ ] UI响应迅速，没有卡顿
+- [ ] 单元测试覆盖所有新功能
+- [ ] 集成测试通过
+- [ ] 没有 regression（现有测试仍通过）
+- [ ] 错误处理测试完整
+- [ ] 边界情况已测试
 
 ## 📦 打包和分发
 
@@ -87,17 +89,39 @@ This checklist is used to validate Copilot PRs before merging into main branch.
 - [ ] 没有待处理的反馈
 - [ ] 代码已准备好合并
 
-## 🎯 合并步骤
+## 🎯 Agent 自动合并流程
 
-1. **使用 squash merge** 保持历史清晰：
-   ```bash
-   gh pr merge <PR_NUMBER> --squash
+**Agent 完全自动化执行以下步骤：**
+
+1. **读取 PR** 使用 `mcp_io_github_git_pull_request_read`:
+   ```
+   Agent 读取 PR 详情、文件变更、检查状态
    ```
 
-2. **验证合并成功**：
-   ```bash
-   git log --oneline main | head -5
+2. **自动审查** 使用 `mcp_io_github_git_pull_request_review_write`:
    ```
+   Agent 验证所有清单项，提交审查评论
+   ```
+
+3. **自动批准** 如果所有检查通过:
+   ```
+   mcp_io_github_git_pull_request_review_write(event: "APPROVE")
+   ```
+
+4. **自动合并** 使用 `mcp_io_github_git_merge_pull_request`:
+   ```
+   Agent 执行 squash merge，自动关闭相关 issue
+   ```
+
+5. **继续下一个** Agent 自动选择下一个优先级 issue 并重复流程
+
+## 💡 人工参与（可选）
+
+人工监督是**可选的**，仅用于：
+- 审查 Agent 的工作质量（学习目的）
+- 处理 Agent 无法自动解决的边缘情况
+
+**正常情况下，Agent 完全自主运行，无需人工干预。**
 
 3. **更新本地main**：
    ```bash

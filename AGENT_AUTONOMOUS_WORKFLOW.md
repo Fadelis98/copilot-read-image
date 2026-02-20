@@ -1,213 +1,111 @@
-# 🔄 Agent Work Management & Continuation Guide
+# 🤖 Agent 完全自主工作流程
 
 ## 📌 用途
 
-本文件指导如何在新的对话中**继续管理和监督远程Agent（Copilot）的工作进展**。
+本文件描述 Agent 如何在新对话中**完全自主地处理所有开发任务**，无需人工监督。
+
+**模式**: 🔴 完全自动化 - Zero Human Intervention
 
 ---
 
-## 🎯 当前Agent任务状态
+## 🎯 当前任务状态
 
-### 活跃任务
-**Issue #2** → **PR #7** 🟡 IN PROGRESS
-- **Assigned to**: Copilot AI Agent
-- **Phase**: 1 - VS Code Extension Architecture Setup
-- **GitHub Link**: https://github.com/Fadelis98/copilot-read-image/pull/7
-- **Expected**: Convert project to VS Code extension, update package.json, create extension.ts, define tools manifest
-- **Status**: Waiting for Copilot to complete implementation
+### 待处理任务 (按优先级)
+- **Issue #3**: Phase 2.1 - readImageFromPath Tool (🔴 HIGH 优先级)
+- **Issue #5**: Phase 2.2 - imgFromBase64 Tool (🟡 MEDIUM)
+- **Issue #4**: Phase 2.3 - imgFromUrl Tool (🟡 MEDIUM)
+- **Issue #6**: Phase 3 - VLM Integration (⏳ 等待 Phase 2 完成)
 
-### 待分配任务
-- **Issue #3**: Phase 2.1 - readImageFromPath Tool (⏳ waiting for Phase 1 complete)
-- **Issue #4**: Phase 2.3 - imgFromUrl Tool (⏳ waiting for Phase 1 complete)
-- **Issue #5**: Phase 2.2 - imgFromBase64 Tool (⏳ waiting for Phase 1 complete)
-- **Issue #6**: Phase 3 - VLM Integration (⏳ waiting for Phases 1-2 complete)
+**Agent 将按此顺序自动处理所有 issues。**
 
 ---
 
-## 📋 在新对话中继续工作的检查清单
+## � Agent 自主循环工作流
 
-### 第一步：快速状态检查 (2分钟)
+### 第一步：自动查找下一个任务 (30秒)
 
 ```bash
-# 1. 查看SESSION_SNAPSHOT.md了解最后已知状态
-cat SESSION_SNAPSHOT.md
+# Agent 自动执行：
+mcp_io_github_git_list_issues(state: "open")
 
-# 2. 检查Copilot PR的最新状态
-gh pr view 7
-
-# 3. 查看PR的自动化检查状态
-gh pr checks 7
-
-# 4. 看最新的提交日志
-git log --oneline origin/main | head -5
+# 按优先级排序，选择最高优先级的 issue
+# 读取 issue 详细规范
+mcp_io_github_git_issue_read(issue_number: 3)
 ```
 
-### 第二步：检查PR详细信息 (3分钟)
+### 第二步：分配并开始工作 (1分钟)
 
 ```bash
-# 获取PR的详细信息
-gh pr view 7 --json title,body,state,reviews,checks,statusCheckRollup
+# Agent 自动分配 issue 给自己
+mcp_io_github_git_assign_copilot_to_issue(issue_number: 3)
 
-# 获取PR中的文件变更
-gh pr view 7 --json files
-
-# 查看PR中的所有评论
-gh pr view 7 --json comments
+# Agent 创建工作分支
+git checkout -b feature/issue-3-read-image-from-path
 ```
 
-### 第三步：检查自动化验证状态 (2分钟)
+### 第三步：本地验证 (5分钟)
 
 ```bash
-# 检查GitHub Actions的运行状态
-gh run list --branch <copilot-branch> --limit 3
-
-# 查看最新workflow run的详情
-gh run view <run-id> --log
+# Agent 自动执行
+npm run build  # ✓ 构建成功
+npm run lint   # ✓ Lint 通过
+npm test       # ✓ 所有测试通过
+npm run format:check  # ✓ 格式正确
 ```
 
----
-
-## 🔍 PR审查清单 (用于代码审查)
-
-### 📊 自动化检查 (GitHub Actions应已完成)
-- [ ] Build 是否通过 ✓ npm run build
-- [ ] Linting 是否通过 ✓ npm run lint
-- [ ] 格式检查是否通过 ✓ npm run format:check
-- [ ] 所有测试是否通过 ✓ npm test
-- [ ] 没有merge conflicts
-- [ ] 所有status checks通过
-
-### 💻 代码质量检查
-使用以下命令本地审查代码：
+### 第四步：创建 PR 和 CI (1-15分钟)
 
 ```bash
-# 1. 检出PR分支以本地审查
-git fetch origin pull/7/head:copilot-branch
-git checkout copilot-branch
+# Agent 自动创建 PR
+mcp_io_github_git_create_pull_request(
+  title: "feat(tools): implement readImageFromPath tool",
+  body: "Closes #3",
+  labels: ["feature", "phase-2"]
+)
 
-# 2. 构建和测试
-npm install
-npm run build
-npm test
-npm run lint
-
-# 3. 查看具体变更
-git diff main...HEAD
-
-# 4. 阅读新增/修改的关键文件
-cat src/extension.ts          # (应该存在)
-cat package.json              # (应该有contributes.languageModelTools)
+# GitHub Actions 自动运行 CI：
+# ✓ Build ✓ Lint ✓ Tests ✓ Coverage >= 80%
 ```
 
-### ✅ 验证Phase 1 要求
+### 第五步：自动代码审查和合并 (3分钟)
 
-**检查清单** ([参考 DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md)):
-
-- [ ] **Extension Manifest**
-  - [ ] package.json 有 vscode 作为 peerDependency
-  - [ ] package.json 有 @types/vscode 在 devDependencies
-  - [ ] package.json 有 activationEvents (至少 "onLanguageModel")
-  - [ ] package.json 有 contributes.languageModelTools 部分
-  - [ ] 三个工具已定义：readImageFromPath, imgFromBase64, imgFromUrl
-  - [ ] 每个工具都有 inputSchema 定义
-
-- [ ] **Extension Entry Point (src/extension.ts)**
-  - [ ] export function activate(context: vscode.ExtensionContext)
-  - [ ] export function deactivate()
-  - [ ] 所有三个工具都已注册
-  - [ ] 没有console.log或debugger语句
-  - [ ] 有适当的错误处理
-
-- [ ] **Tool Implementations**
-  - [ ] src/tools/index.ts 存在并导出工具类
-  - [ ] 每个工具都实现 implement vscode.LanguageModelTool
-  - [ ] 每个工具都有 invoke() 方法
-  - [ ] 返回类型正确 LanguageModelToolResult
-
-- [ ] **配置文件**
-  - [ ] tsconfig.json 包含 @types/vscode
-  - [ ] .vscodeignore 已创建
-  - [ ] .vscode/launch.json 已创建
-  - [ ] CHANGELOG.md 已更新
-
-- [ ] **代码质量**
-  - [ ] 所有TypeScript代码通过strict mode编译
-  - [ ] 没有any类型使用
-  - [ ] 所有公共API都有JSDoc注释
-  - [ ] 测试覆盖率 >= 80%
-
----
-
-## 🚀 审查和合并流程
-
-### 当PR准备好进行审查时：
-
-#### 1️⃣ **使用PR Manager脚本检查状态**
 ```bash
-# 查看PR是否准备好合并
-./scripts/pr-manager.sh check 7
+# Agent 读取 PR 并验证所有检查清单项
+mcp_io_github_git_pull_request_read(pr_number: 8)
+
+# Agent 提交审查评论
+mcp_io_github_git_pull_request_review_write(
+  event: "COMMENT",
+  body: "✅ All checks passed"
+)
+
+# Agent 自动批准
+mcp_io_github_git_pull_request_review_write(event: "APPROVE")
+
+# Agent 自动合并
+mcp_io_github_git_merge_pull_request(
+  merge_method: "squash"
+)
 ```
 
-#### 2️⃣ **生成审查报告**
+### 第六步：连续处理下一个任务 (循环)
+
 ```bash
-# 获取所有相关信息
-echo "=== PR #7 Review Report ==="
-echo "Title: $(gh pr view 7 --json title -q)"
-echo "Author: $(gh pr view 7 --json author -q)"
-echo "State: $(gh pr view 7 --json state -q)"
-echo "Checks: $(gh pr view 7 --json statusCheckRollup -q)"
-```
-
-#### 3️⃣ **代码审查**
-如果自动检查通过：
-- 阅读PR描述
-- 查看文件变更
-- 运行本地构建和测试
-- 参考MERGE_CHECKLIST.md
-
-#### 4️⃣ **批准PR**
-```bash
-# 添加审查评论（如果需要）
-gh pr review 7 --comment --body "Looks good! Checking for merge readiness."
-
-# 批准PR
-gh pr review 7 --approve
-```
-
-#### 5️⃣ **合并PR (当所有检查通过)**
-```bash
-# 执行squash merge保持历史清晰
-gh pr merge 7 --squash --auto
-
-# 或手动触发:
-gh pr merge 7 --squash
+# Issue #3 完成 → Issue #5 开始
+# 重复步骤 1-5，直到所有 issues 完成
 ```
 
 ---
 
-## 📈 合并后的后续步骤
+## 🎯 预期总耗时
 
-### 当PR #7合并到main后：
+```
+Issue #3: 45 分钟 (实现 + CI + 自动合并)
+Issue #5: 45 分钟
+Issue #4: 45 分钟
+Issue #6: 45 分钟
 
-```bash
-# 1. 更新本地main分支
-git checkout main
-git pull origin main
-
-# 2. 验证合并成功
-git log --oneline | head -3
-
-# 3. 清理本地分支
-git branch -d copilot-branch
-
-# 4. 更新SESSION_SNAPSHOT.md
-# (编辑文件，更新"已完成"和"进行中"部分)
-vim SESSION_SNAPSHOT.md
-git add SESSION_SNAPSHOT.md
-git commit -m "docs: update session snapshot - Phase 1 complete"
-
-# 5. 分配Phase 2任务给Copilot
-# (使用assign_copilot_to_issue工具)
+总计: ~3 小时，完全自动，无需人工干预 🤖
 ```
 
 ---

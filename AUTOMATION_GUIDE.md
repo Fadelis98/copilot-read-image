@@ -169,10 +169,10 @@ gh run list --branch=main --limit=5
    ```
    All checks must show ✓ status
 
-3. **Manual Review (if needed)**
-   - You or authorized reviewer checks code quality
-   - Verifies against MERGE_CHECKLIST.md items
-   - Approves PR if all conditions met
+3. **Agent Auto-Review**
+   - Agent reads PR using `mcp_io_github_git_pull_request_read`
+   - Auto-validates all MERGE_CHECKLIST.md items
+   - Auto-approves using `mcp_io_github_git_pull_request_review_write`
 
 4. **Version Update (if major release)**
    ```bash
@@ -180,11 +180,12 @@ gh run list --branch=main --limit=5
    ```
    Updates version, CHANGELOG, and creates tag
 
-5. **Merge PR**
+5. **Agent Auto-Merge PR**
    ```bash
-   gh pr merge <PR_NUMBER> --squash
+   # Agent uses GitHub MCP:
+   mcp_io_github_git_merge_pull_request
    ```
-   Uses squash merge to keep history clean
+   Uses squash merge, auto-closes issue, fully automated
 
 6. **Push Release Tag (if applicable)**
    ```bash

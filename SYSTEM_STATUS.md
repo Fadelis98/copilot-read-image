@@ -161,8 +161,10 @@ Your **copilot-read-image** project is now fully equipped with an autonomous dev
                  │
                  ▼
 ┌─────────────────────────────────────────────────┐
-│   Human Review & Approval                      │
-│   (Using MERGE_CHECKLIST.md as reference)      │
+│   🤖 Agent Auto-Review & Approval              │
+│   ✓ Read PR using GitHub MCP                  │
+│   ✓ Validate all MERGE_CHECKLIST items        │
+│   ✓ Auto-approve if all checks pass           │
 └────────────────┬────────────────────────────────┘
                  │
                  ▼
@@ -175,8 +177,9 @@ Your **copilot-read-image** project is now fully equipped with an autonomous dev
                  │
                  ▼
 ┌─────────────────────────────────────────────────┐
-│   Merge to Main                                │
-│   gh pr merge <PR_NUMBER> --squash             │
+│   🤖 Agent Auto-Merge to Main                  │
+│   mcp_io_github_git_merge_pull_request         │
+│   (Squash merge, auto-close issue)            │
 └────────────────┬────────────────────────────────┘
                  │
                  ▼

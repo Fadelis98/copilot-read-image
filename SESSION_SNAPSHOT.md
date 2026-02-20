@@ -295,12 +295,12 @@ gh issue list --state=open
 # - 实现代码和测试
 # - 提交 PR 并引用 issue (自动关闭 issue)
 
-# 步骤4: 审查 Copilot 创建的 PR
-./scripts/pr-manager.sh check <PR_NUMBER>
+# 步骤4: Agent 自动审查 PR
+# Copilot 使用 GitHub MCP 自动读取并验证 PR
 
-# 步骤5: 测试并合并
-# F5 在 VS Code 中测试扩展
-# 通过后合并 PR
+# 步骤5: Agent 自动合并
+# Copilot 使用 mcp_io_github_git_merge_pull_request
+# 完全自动，无需人工干预
 ```
 
 ### 备选工作流（手动开发）
