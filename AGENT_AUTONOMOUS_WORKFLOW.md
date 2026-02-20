@@ -4,6 +4,45 @@
 
 ---
 
+## 🌿 分支策略（必须遵守）
+
+从现在开始，本项目采用固定双分支模型：
+
+- `dev`：**唯一日常开发分支**（功能开发、修复、文档、重构都在这里）
+- `main`：**公开/发布分支**（只接收“可发布状态”的合并）
+
+### 强制规则
+
+1. 新任务一律从 `dev` 开始，不直接在 `main` 开发
+2. `main` 仅在达到“可发布阶段”后，从 `dev` 合并更新
+3. 紧急修复默认也先进入 `dev`，验证后再同步到 `main`
+
+### 标准操作流程
+
+```bash
+# 1) 开始开发：确保在 dev
+git checkout dev
+git pull origin dev
+
+# 2) 开发与验证
+npm run build && npm test && npm run lint
+
+# 3) 推送 dev
+git add .
+git commit -m "feat/fix/docs: ..."
+git push origin dev
+
+# 4) 达到可发布阶段后，合并 dev -> main
+git checkout main
+git pull origin main
+git merge --no-ff dev
+git push origin main
+```
+
+> 若需要保持 `main` 极简公开内容，可在 `dev -> main` 前做发布裁剪并二次验证。
+
+---
+
 ## 🧠 本地 Agent 的核心职责：分析与规划
 
 用户通常**描述问题或需求**，而不是给出具体指令。本地 Agent 需要：
@@ -48,7 +87,9 @@
 
 **流程**：
 ```bash
-# 1. 创建分支
+# 1. 从 dev 创建工作分支
+git checkout dev
+git pull origin dev
 git checkout -b fix/issue-description
 
 # 2. 实现代码
@@ -60,8 +101,11 @@ npm run build && npm test && npm run lint
 # 4. 提交并推送
 git add . && git commit -m "fix: ..." && git push origin HEAD
 
-# 5. 创建 PR（可选，或直接合并到 main）
+# 5. 创建 PR（目标分支应为 dev）
 mcp_io_github_git_create_pull_request(...)
+
+# 6. 发布阶段再将 dev 合并到 main
+# （参考上方“分支策略”）
 ```
 
 ---
@@ -138,6 +182,9 @@ GitHub Actions（自动）
 ```bash
 # 1. 了解当前状态
 cat SESSION_SNAPSHOT.md
+
+# 1.5 确认当前在 dev 分支（不是 main）
+git checkout dev && git pull origin dev
 
 # 2. 检查 GitHub 实时状态
 git log --oneline | head -5

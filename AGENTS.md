@@ -44,7 +44,15 @@ This file is automatically loaded when agents enter this project directory.
    npm run lint
    ```
 
+5. **🌿 确认分支策略** (10秒)
+   ```bash
+   # 日常开发必须在 dev，main 仅用于发布
+   git checkout dev && git pull origin dev
+   ```
+
 **✨ 完成！你现在完全恢复了上下文，可以继续工作。** 🚀
+
+> **分支硬规则**：永远在 `dev` 开发；只有达到可发布阶段才从 `dev` 合并回 `main`。
 
 ---
 
