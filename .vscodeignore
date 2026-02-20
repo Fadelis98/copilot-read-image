@@ -1,0 +1,16 @@
+# VS Code configuration (useful for development but not for end-users)
+.vscode/
+.git/
+node_modules/
+coverage/
+out/
+.nyc_output
+*.vsix
+src/
+tests/
+*.map
+tsconfig*.json
+eslint.config.mjs
+jest.config.js
+.prettierrc
+.gitignore
