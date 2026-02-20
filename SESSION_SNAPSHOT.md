@@ -130,7 +130,7 @@ npm ci && npm run build && npm test && npm run lint
 - **已合并 PR**: #7（扩展架构）、#8（readImageFromPath）、#9（imgFromBase64）
 - **开放 Issues**: #4（imgFromUrl）、#6（VLM 集成）
 - **测试状态**: ✅ 32/32 tests passed
-- **最后提交**: ed30311 (feat(tools): implement ImgFromBase64Tool)
+- **最后提交**: 354d852 (fix(extension): add missing toolReferenceName and canBeReferencedInPrompt to languageModelTools)
 
 ---
 
