@@ -94,15 +94,82 @@ export class ReadImageFromPathTool
   }
 }
 
+const SUPPORTED_MIME_TYPES = new Set([
+  'image/png',
+  'image/jpeg',
+  'image/gif',
+  'image/webp',
+  'image/bmp',
+  'image/svg+xml',
+]);
+
 export class ImgFromBase64Tool
   implements vscode.LanguageModelTool<ImgFromBase64Input>
 {
   async invoke(
-    _options: vscode.LanguageModelToolInvocationOptions<ImgFromBase64Input>,
+    options: vscode.LanguageModelToolInvocationOptions<ImgFromBase64Input>,
     _token: vscode.CancellationToken
   ): Promise<vscode.LanguageModelToolResult> {
-    // TODO: Phase 2 – implement actual base64 image decoding
-    return new vscode.LanguageModelToolResult([]);
+    const { base64Data, mimeType: explicitMimeType } = options.input;
+
+    if (!base64Data || base64Data.trim() === '') {
+      throw new Error('base64Data must not be empty');
+    }
+
+    let raw = base64Data.trim();
+    let detectedMimeType: string | undefined;
+
+    // Strip data URI prefix and extract MIME type
+    const dataUriMatch = raw.match(/^data:([^;]+);base64,(.+)$/s);
+    if (dataUriMatch) {
+      detectedMimeType = dataUriMatch[1];
+      raw = dataUriMatch[2];
+    }
+
+    // Normalize URL-safe base64 (- → +, _ → /) and strip whitespace
+    raw = raw.replace(/\s/g, '').replace(/-/g, '+').replace(/_/g, '/');
+
+    // Validate base64 character set
+    if (!/^[A-Za-z0-9+/]*={0,2}$/.test(raw)) {
+      throw new Error('Invalid base64 encoding: contains invalid characters');
+    }
+
+    const data = Buffer.from(raw, 'base64');
+
+    if (data.length === 0 && raw.length > 0) {
+      throw new Error('Invalid base64 encoding: decoded to empty buffer');
+    }
+
+    if (data.length > MAX_FILE_SIZE) {
+      throw new Error(
+        `Decoded image too large: ${data.length} bytes (maximum allowed is ${MAX_FILE_SIZE} bytes)`
+      );
+    }
+
+    // MIME type priority: data URI > explicit param > auto-detect > default
+    const format = detectFormat(data);
+    const autoMimeType = format !== 'unknown' ? MIME_TYPE_MAP[format] : undefined;
+    const mimeType = detectedMimeType ?? explicitMimeType ?? autoMimeType ?? 'image/png';
+
+    if (!SUPPORTED_MIME_TYPES.has(mimeType)) {
+      throw new Error(
+        `Unsupported MIME type: "${mimeType}" (supported: ${[...SUPPORTED_MIME_TYPES].join(', ')})`
+      );
+    }
+
+    const metadata = JSON.stringify({
+      originalSize: base64Data.length,
+      decodedSize: data.length,
+      mimeType,
+      source: 'base64',
+    });
+
+    const imagePart: ImageDataPart = { data, mimeType };
+
+    return new vscode.LanguageModelToolResult([
+      new vscode.LanguageModelTextPart(metadata),
+      imagePart as unknown as vscode.LanguageModelPromptTsxPart,
+    ]);
   }
 }
 
