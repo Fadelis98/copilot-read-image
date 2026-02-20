@@ -21,7 +21,6 @@ Thumbs.db
 
 # Editor directories
 .idea/
-.vscode/
 *.suo
 *.ntvs*
 *.njsproj

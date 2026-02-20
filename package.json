@@ -1,8 +1,10 @@
 {
   "name": "copilot-read-image",
-  "version": "0.1.0",
-  "description": "A GitHub Copilot plugin for reading and analysing images",
-  "main": "dist/index.js",
+  "displayName": "Copilot Image Reader",
+  "version": "0.2.0",
+  "description": "A VS Code extension that provides GitHub Copilot with image reading capabilities through registered language model tools",
+  "publisher": "fadelis98",
+  "main": "dist/extension.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
@@ -19,13 +21,100 @@
     "copilot",
     "plugin",
     "image",
-    "github-copilot"
+    "github-copilot",
+    "vscode-extension"
   ],
   "author": "",
   "license": "MIT",
+  "engines": {
+    "vscode": "^1.95.0",
+    "node": ">=18"
+  },
+  "activationEvents": [
+    "onLanguageModel",
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "languageModelTools": [
+      {
+        "name": "readImageFromPath",
+        "displayName": "Read Image From Path",
+        "description": "Reads an image from a local file path and returns its metadata and content for analysis",
+        "modelDescription": "Use this tool to read an image file from a local path. It returns the image format, size, and raw data encoded as base64 for further analysis.",
+        "icon": "$(file-media)",
+        "tags": [
+          "image",
+          "file"
+        ],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "imagePath": {
+              "type": "string",
+              "description": "Absolute or relative path to the image file"
+            }
+          },
+          "required": [
+            "imagePath"
+          ]
+        }
+      },
+      {
+        "name": "imgFromBase64",
+        "displayName": "Image From Base64",
+        "description": "Decodes a base64-encoded image string and returns its metadata and content for analysis",
+        "modelDescription": "Use this tool when you have a base64-encoded image string and need to decode and analyse it. Provide the base64 data and optionally the MIME type.",
+        "icon": "$(symbol-string)",
+        "tags": [
+          "image",
+          "encoding"
+        ],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "base64Data": {
+              "type": "string",
+              "description": "Base64-encoded image data"
+            },
+            "mimeType": {
+              "type": "string",
+              "description": "Optional MIME type of the image (e.g. image/png, image/jpeg)"
+            }
+          },
+          "required": [
+            "base64Data"
+          ]
+        }
+      },
+      {
+        "name": "imgFromUrl",
+        "displayName": "Image From URL",
+        "description": "Fetches an image from a URL and returns its metadata and content for analysis",
+        "modelDescription": "Use this tool to fetch and analyse an image from a remote URL. It downloads the image and returns its format, size, and content.",
+        "icon": "$(cloud-download)",
+        "tags": [
+          "image",
+          "network"
+        ],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "imageUrl": {
+              "type": "string",
+              "description": "URL of the image to fetch"
+            }
+          },
+          "required": [
+            "imageUrl"
+          ]
+        }
+      }
+    ]
+  },
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.5",
+    "@types/vscode": "^1.95.0",
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
     "eslint": "^9.20.1",
@@ -33,8 +122,5 @@
     "prettier": "^3.5.1",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.3"
-  },
-  "engines": {
-    "node": ">=18"
   }
 }
