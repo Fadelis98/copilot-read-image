@@ -18,7 +18,7 @@
 
 | Issue | 工具 | 优先级 | 状态 |
 |-------|------|--------|------|
-| [#3](https://github.com/Fadelis98/copilot-read-image/issues/3) | `readImageFromPath` | 🔴 HIGH | 待分配 |
+| [#3](https://github.com/Fadelis98/copilot-read-image/issues/3) | `readImageFromPath` | 🔴 HIGH | 🤖 远程 Agent 开发中 → [PR #8](https://github.com/Fadelis98/copilot-read-image/pull/8) |
 | [#5](https://github.com/Fadelis98/copilot-read-image/issues/5) | `imgFromBase64` | 🟡 MEDIUM | 待分配 |
 | [#4](https://github.com/Fadelis98/copilot-read-image/issues/4) | `imgFromUrl` | 🟡 MEDIUM | 待分配 |
 | [#6](https://github.com/Fadelis98/copilot-read-image/issues/6) | VLM 集成 | ⏳ Blocked | 等待 Phase 2 |
@@ -44,25 +44,36 @@ npm ci && npm run build && npm test && npm run lint
 
 ---
 
-## 🎯 下一步推荐行动
+## 🎯 当前行动项
 
-**优先实现 Issue #3**（readImageFromPath，最高优先级）：
+### ⏳ PR #8 待审查（Issue #3 - readImageFromPath）
+
+远程 Agent 正在开发 [PR #8](https://github.com/Fadelis98/copilot-read-image/pull/8)。
+
+**等待 PR 完成后，执行审查流程**（参考 [AGENT_AUTO_MERGE_GUIDE.md](AGENT_AUTO_MERGE_GUIDE.md)）：
 
 ```bash
-# 分配给远程 Agent（在 Copilot Chat 中使用 MCP 工具）
-mcp_io_github_git_assign_copilot_to_issue(
-  owner: "Fadelis98",
-  repo: "copilot-read-image",
-  issue_number: 3
-)
+# 检查 PR 状态和 CI
+gh pr checks 8
+gh pr view 8
+
+# 本地验证
+git fetch origin pull/8/head:pr-8
+git checkout pr-8
+npm ci && npm run build && npm test && npm run lint
 ```
 
-工具规范（来自 Issue #3）：
-- 输入：`{ imagePath: string }`（注意：`package.json` 中字段名为 `imagePath`，`tools/index.ts` 中为 `imagePath`）
-- 验证：路径遍历防护、文件存在性检查
-- 输出：`LanguageModelToolResult` 含图像二进制数据
-- 图像数据格式：`new vscode.LanguageModelDataPart(buffer, mimeType)`
-- 支持格式：PNG、JPEG、GIF、WebP、BMP
+**审查重点**（已通过 custom_instructions 告知远程 Agent）：
+- 输入字段名必须是 `imagePath`（与 `package.json` inputSchema 一致，不是 `filePath`）
+- 复用 `src/index.ts` 中的 `detectFormat()` 逻辑
+- 图像数据：`new vscode.LanguageModelDataPart(buffer, mimeType)`（构造函数，非静态方法）
+- 测试文件：`tests/readImageFromPath.test.ts`，覆盖率 >= 80%
+- `CHANGELOG.md` 已更新
+
+### 📋 后续（PR #8 合并后）
+1. 分配 Issue #5（`imgFromBase64`）给远程 Agent
+2. 分配 Issue #4（`imgFromUrl`）给远程 Agent
+3. 两个 PR 合并后，分配 Issue #6（VLM 集成）
 
 ---
 
@@ -105,4 +116,4 @@ mcp_io_github_git_assign_copilot_to_issue(
 ---
 
 **Updated**: 2026-02-20  
-**Status**: ✅ Phase 1 Complete | 🟡 Phase 2 Ready (Issues #3, #4, #5 open)
+**Status**: ✅ Phase 1 Complete | � Phase 2 In Progress — PR #8 open (Issue #3 readImageFromPath)
