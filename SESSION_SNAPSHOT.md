@@ -1,6 +1,6 @@
 # 🔄 Latest Work Session - 最新工作状态快照
 
-**上次更新**: 2026-02-20 (Session at 14:30 UTC)  
+**上次更新**: 2026-02-20 (Updated: 23:00 UTC)  
 **维护者**: GitHub Copilot + Human (Fadelis98)  
 
 ---
@@ -10,9 +10,9 @@
 ### ✅ 已完成
 - [x] 项目概述和需求分析（VS Code Copilot扩展）
 - [x] 完整的开发计划（5个阶段）
-- [x] GitHub Issues创建（5个issues）
+- [x] **通过 GitHub MCP 创建了 5 个 issues** (Issue #2-#6)
 - [x] **Phase 1 完成** ✨ 2026-02-20
-  - Issue #2 已完成 (PR #7 已合并)
+  - Issue #2 已完成并关闭（PR #7 已合并）
   - VS Code扩展架构设置完成
   - 三个工具定义完成
   - 所有文档准备就绪
@@ -29,16 +29,41 @@
   - AGENT_MANAGEMENT.md
   - LOCAL_TESTING_GUIDE.md
   - SESSION_SNAPSHOT.md
-  - 更多...
+  - AGENT_WORKFLOW_IMPROVEMENTS.md
 
-### 🟡 进行中（下一步：Phase 2 - 工具实现）
-待分配给新Copilot Agent:
-- **Issue #3**: Phase 2.1 - Implement readImageFromPath Tool
-- **Issue #4**: Phase 2.3 - Implement imgFromUrl Tool  
-- **Issue #5**: Phase 2.2 - Implement imgFromBase64 Tool
+### 🟡 待处理（Phase 2 & 3 - 开放的 GitHub Issues）
 
-### ⏳ 待开始
-- **Issue #6**: Phase 3 - Integrate Tools with VLM Image API
+**Phase 2: 工具实现** - 3个开放issues待分配给Agent:
+
+- **Issue #3**: [Phase 2.1 - Implement readImageFromPath Tool](https://github.com/Fadelis98/copilot-read-image/issues/3)
+  - 📌 **优先级**: 🔴 HIGH（建议首先实现）
+  - 🎯 目标: 实现本地文件读取工具
+  - ✅ 要求: 路径验证、安全检查、MIME类型检测、VLM格式返回
+  - 📝 标签: `feature`, `phase-2`, `tool-implementation`
+  - 🔗 链接: https://github.com/Fadelis98/copilot-read-image/issues/3
+
+- **Issue #5**: [Phase 2.2 - Implement imgFromBase64 Tool](https://github.com/Fadelis98/copilot-read-image/issues/5)
+  - 📌 **优先级**: 🟡 MEDIUM
+  - 🎯 目标: 实现Base64解码工具
+  - ✅ 要求: 支持data URI、自动MIME检测、标准/URL-safe base64
+  - 📝 标签: `feature`, `phase-2`, `tool-implementation`
+  - 🔗 链接: https://github.com/Fadelis98/copilot-read-image/issues/5
+
+- **Issue #4**: [Phase 2.3 - Implement imgFromUrl Tool](https://github.com/Fadelis98/copilot-read-image/issues/4)
+  - 📌 **优先级**: 🟡 MEDIUM
+  - 🎯 目标: 实现URL图像获取工具
+  - ✅ 要求: SSRF防护、超时控制、重定向处理、大小限制
+  - 📝 标签: `feature`, `phase-2`, `tool-implementation`
+  - 🔗 链接: https://github.com/Fadelis98/copilot-read-image/issues/4
+
+**Phase 3: VLM 集成** - 1个开放issue:
+
+- **Issue #6**: [Phase 3 - Integrate Tools with VLM Image API & Validation](https://github.com/Fadelis98/copilot-read-image/issues/6)
+  - 📌 **优先级**: ⏳ Blocked（等待Phase 2完成）
+  - 🎯 目标: VLM兼容性验证和集成测试
+  - ✅ 要求: 结果格式标准化、工具注册验证、VLM测试
+  - 📝 标签: `feature`, `phase-3`, `integration`
+  - 🔗 链接: https://github.com/Fadelis98/copilot-read-image/issues/6
 
 ---
 
@@ -174,11 +199,93 @@ docs(readme): update usage examples
 
 **GitHub仓库**: https://github.com/Fadelis98/copilot-read-image
 
-**当前工作**:
-- PR #7: https://github.com/Fadelis98/copilot-read-image/pull/7
-- Issue #2: https://github.com/Fadelis98/copilot-read-image/issues/2
+**GitHub Issues（通过 MCP 创建）**:
+- ✅ [Issue #2](https://github.com/Fadelis98/copilot-read-image/issues/2) - Phase 1: VS Code Extension Setup (已关闭)
+- 🟡 [Issue #3](https://github.com/Fadelis98/copilot-read-image/issues/3) - Phase 2.1: Implement readImageFromPath Tool
+- 🟡 [Issue #4](https://github.com/Fadelis98/copilot-read-image/issues/4) - Phase 2.3: Implement imgFromUrl Tool  
+- 🟡 [Issue #5](https://github.com/Fadelis98/copilot-read-image/issues/5) - Phase 2.2: Implement imgFromBase64 Tool
+- ⏳ [Issue #6](https://github.com/Fadelis98/copilot-read-image/issues/6) - Phase 3: VLM Integration & Validation
+
+**Pull Requests**:
+- ✅ [PR #7](https://github.com/Fadelis98/copilot-read-image/pull/7) - Phase 1 Complete (已合并)
 
 **GitHub Actions**: https://github.com/Fadelis98/copilot-read-image/actions
+
+---
+
+## 🤖 如何使用 GitHub Issues 与 Agent 协作
+
+### 分配 Issue 给 Copilot（通过 MCP）
+
+在新对话中，您可以：
+
+1️⃣ **查看所有开放的 issues**:
+```bash
+# 使用 gh CLI
+gh issue list --state=open
+
+# 或通过 GitHub MCP (在 Copilot 中)
+# "List all open issues in the copilot-read-image repo"
+```
+
+2️⃣ **分配 Issue 给 Agent**:
+```bash
+# 使用 gh CLI
+gh issue edit 3 --add-assignee @me
+
+# 或通过 GitHub MCP
+# "Assign issue #3 to Copilot for implementation"
+```
+
+3️⃣ **Agent 开始工作**:
+- Agent 会读取 issue 详情
+- 创建对应的功能分支（如 `feature/issue-3-read-image-from-path`）
+- 实现代码和测试
+- 提交 PR 引用该 issue（`Closes #3`）
+
+4️⃣ **监控 Agent 进度**:
+```bash
+# 查看与 issue 相关的 PR
+gh pr list --search "issue:3"
+
+# 查看 issue 评论
+gh issue view 3 --comments
+```
+
+### Issue 模板提供的信息
+
+每个 issue 包含：
+- ✅ **Overview**: 功能概述和目标
+- ✅ **Technical Details**: 技术规范和API设计
+- ✅ **Requirements**: 详细需求检查清单
+- ✅ **Security Considerations**: 安全要求（如SSRF防护）
+- ✅ **Error Handling**: 错误场景列表
+- ✅ **File Structure**: 建议的文件组织
+- ✅ **Tests**: 测试用例要求
+- ✅ **References**: 相关文档链接
+
+### 推荐工作流
+
+```bash
+# 步骤1: 选择一个 issue（建议从 #3 开始）
+gh issue view 3
+
+# 步骤2: 告诉 Copilot 开始工作
+# "Please implement issue #3 (readImageFromPath tool)"
+
+# 步骤3: Copilot 会:
+# - 创建分支 feature/issue-3-read-image-from-path
+# - 实现代码
+# - 编写测试
+# - 提交 PR 并引用 issue
+
+# 步骤4: 审查 PR
+./scripts/pr-manager.sh check <PR_NUMBER>
+
+# 步骤5: 测试并合并
+# F5 在 VS Code 中测试扩展
+# 通过后合并 PR（自动关闭 issue）
+```
 
 ---
 
@@ -223,14 +330,27 @@ b78712c Merge pull request #7: Phase 1 - VS Code extension setup
 - 三个工具已定义
 - 开发环境就绪
 - 文档完整
+- Issue #2 已关闭
 
-**项目状态**: ✅ Phase 1完成 | 🟡 Phase 2准备分配
+**项目状态**: ✅ Phase 1完成 | 🟡 Phase 2 已通过 GitHub MCP 创建 issues，等待分配
 
-**下一步**: 
-1. ✅ 本次会话：自主测试并验证PR #7 → 合并完成
-2. 新对话：分配Issue #3/#4/#5给新Copilot Agent进行Phase 2
-3. 实现三个工具的具体功能
-4. 完成集成和发布
+**下一步（通过 GitHub Issues 管理）**: 
+1. 🟡 **Issue #3**: 实现 readImageFromPath 工具（建议首先）
+2. 🟡 **Issue #5**: 实现 imgFromBase64 工具
+3. 🟡 **Issue #4**: 实现 imgFromUrl 工具
+4. ⏳ **Issue #6**: VLM 集成和验证（等待前3个完成）
+
+**如何开始下一步**:
+```bash
+# 在新对话中，告诉 Copilot:
+"Please implement issue #3 - readImageFromPath tool"
+
+# Copilot 会:
+# 1. 读取 issue #3 的完整规范
+# 2. 创建功能分支
+# 3. 实现代码和测试
+# 4. 提交 PR 并引用 issue（自动关闭 issue）
+```
 
 ---
 
@@ -239,15 +359,16 @@ b78712c Merge pull request #7: Phase 1 - VS Code extension setup
 当新对话开始时:
 
 1. ✅ 系统会自动加载AGENTS.md
-2. ✅ 你可以快速读取本文件(SESSION_SNAPSHOT.md)
-3. ✅ 查看DEVELOPMENT_PLAN.md了解全局计划
-4. ✅ 运行 `git log` 查看最近的工作
-5. ✅ 使用 `gh` 命令检查实时GitHub状态
+2. ✅ 你可以快速读取本文件(SESSION_SNAPSHOT.md)获取最新状态
+3. ✅ 查看GitHub issues了解待办任务（Issue #3-#6）
+4. ✅ 查看DEVELOPMENT_PLAN.md了解全局计划
+5. ✅ 运行 `git log` 查看最近的工作
+6. ✅ 使用 `gh issue list` 检查实时GitHub状态
 
-**结果**: 你可以在30秒内完全理解当前项目状态，继续工作！
+**结果**: 你可以在1分钟内完全理解当前项目状态和待办任务，立即开始工作！
 
 ---
 
-**Updated**: 2026-02-20 14:30 UTC  
+**Updated**: 2026-02-20 23:00 UTC  
 **By**: Fadelis98 + GitHub Copilot  
-**Status**: 🟢 All Systems Operational
+**Status**: 🟢 All Systems Operational | 🟡 4 Open Issues Ready for Implementation
