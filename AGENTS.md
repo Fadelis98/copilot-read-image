@@ -163,19 +163,10 @@ Enable GitHub Copilot to analyze images directly within chat workflows by provid
 - [AGENT_AUTONOMOUS_WORKFLOW.md](AGENT_AUTONOMOUS_WORKFLOW.md) - 本地/远程 Agent 职责和协作流程
 - [AGENT_AUTO_MERGE_GUIDE.md](AGENT_AUTO_MERGE_GUIDE.md) - PR 审查、冲突解决和合并指南
 
-**🔧 Agent工作流改进 (从Phase 1学到的经验)**:
-- [AGENT_WORKFLOW_IMPROVEMENTS.md](AGENT_WORKFLOW_IMPROVEMENTS.md) - Phase 1合并中发现的问题及改进
-  - 6大问题识别和解决方案
-  - 新的初始化脚本
-  - 改进的检查清单
-  - 对Phase 2及后续的建议
-
 **必读文档 (Start Here)**:
 - [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) - 5阶段开发路线图
-- [SYSTEM_STATUS.md](SYSTEM_STATUS.md) - 系统当前状态概览
 
 **工作参考**:
-- [AUTOMATION_GUIDE.md](AUTOMATION_GUIDE.md) - 自动化工作流详细指南
 - [MERGE_CHECKLIST.md](MERGE_CHECKLIST.md) - PR合并前验证清单
 - [LOCAL_TESTING_GUIDE.md](LOCAL_TESTING_GUIDE.md) - 本地测试和调试指南
 
@@ -356,41 +347,34 @@ copilot-read-image/
 ├── .github/
 │   ├── workflows/
 │   │   └── pr-validation.yml      # GitHub Actions配置
-│   ├── CODEOWNERS                 # 代码所有者配置
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.md
 │   │   └── feature_request.md
 │   └── PULL_REQUEST_TEMPLATE.md   # PR模板
 ├── scripts/
+│   ├── checkout-and-initialize.sh # 分支检出初始化脚本
 │   ├── pr-manager.sh              # PR监控和管理脚本
 │   └── version-bump.sh            # 版本管理脚本
 ├── src/
-│   ├── tools/                     # VS Code工具实现 (待实现)
-│   │   └── index.ts               # 工具导出 (待实现)
-│   ├── utils/                     # 工具函数
-│   │   ├── imageFormat.ts         # (从index.ts重构)
-│   │   ├── mimeType.ts            # (待创建)
-│   │   └── validation.ts          # (待创建)
-│   ├── types/                     # TypeScript类型定义
-│   │   └── index.ts               # (待创建)
-│   ├── extension.ts               # VS Code扩展入口 (待创建)
-│   └── index.ts                   # 原图像库代码 (将迁移/重构)
+│   ├── tools/
+│   │   └── index.ts               # 三个工具占位符（Phase 2待实现）
+│   ├── extension.ts               # VS Code扩展入口（已完成）
+│   └── index.ts                   # 原图像库代码（readImage, detectFormat）
 ├── tests/
-│   ├── index.test.ts              # 存在的测试
-│   ├── readImageFromPath.test.ts  # (待创建)
-│   ├── imgFromBase64.test.ts      # (待创建)
-│   └── imgFromUrl.test.ts         # (待创建)
-├── package.json                   # 依赖配置 (待更新)
+│   └── index.test.ts              # 现有单元测试（8个测试通过）
+├── package.json                   # 扩展清单 + 依赖配置
 ├── tsconfig.json                  # TypeScript配置
 ├── tsconfig.eslint.json           # ESLint TS配置
 ├── jest.config.js                 # Jest配置
 ├── eslint.config.mjs              # ESLint配置
 ├── .prettierrc                    # Prettier配置
-├── AGENTS.md                      # ← 本文件
-├── SYSTEM_STATUS.md               # 系统状态概览
-├── AUTOMATION_GUIDE.md            # 自动化工作流指南
+├── AGENTS.md                      # ← 本文件（Agent工作指南）
+├── SESSION_SNAPSHOT.md            # 当前工作状态快照
+├── AGENT_AUTONOMOUS_WORKFLOW.md   # 本地/远程Agent协作流程
+├── AGENT_AUTO_MERGE_GUIDE.md      # PR审查和合并指南
 ├── MERGE_CHECKLIST.md             # 合并检查清单
 ├── DEVELOPMENT_PLAN.md            # 开发路线图
+├── LOCAL_TESTING_GUIDE.md         # 本地调试指南
 ├── CHANGELOG.md                   # 版本历史
 ├── LICENSE                        # MIT许可
 └── README.md                      # 项目说明
@@ -506,23 +490,26 @@ npm run build:watch       # 监视模式构建
 
 ---
 
-## 🎯 当前开发阶段 - Phase 1
+## 🎯 当前开发阶段 - Phase 2
 
-**状态**: 🟡 IN PROGRESS (PR #7)  
-**任务**: VS Code扩展架构和清单设置
+**状态**: 🟡 READY TO START  
+**任务**: 实现三个图像处理工具
 
-### Phase 1需要完成的工作:
-- [x] 创建 `src/extension.ts` 入口点
-- [x] 配置 `package.json` 扩展清单
-- [x] 定义 `contributes.languageModelTools`
-- [x] 创建工具占位符实现
-- [ ] 验证 GitHub Actions构建通过
-- [ ] 确保所有测试通过
+### Phase 2需要完成的工作:
+- [ ] Issue #3: 实现 `readImageFromPath` 工具（🔴 HIGH 优先）
+- [ ] Issue #5: 实现 `imgFromBase64` 工具
+- [ ] Issue #4: 实现 `imgFromUrl` 工具
+- [ ] 为每个工具添加完整的单元测试（覆盖率 >= 80%）
 
-### 当完成Phase 1后:
-1. PR #7将被合并到main
-2. Phase 2 issues将自动分配给新agent
-3. 工作转向具体工具实现
+### Phase 1已完成（参考）:
+- [x] `src/extension.ts` 入口点（已完成）
+- [x] `package.json` 扩展清单（已完成）
+- [x] `contributes.languageModelTools` 定义（已完成）
+- [x] 工具占位符实现（已完成，PR #7 已合并）
+
+### 当完成Phase 2后:
+1. 三个工具 PR 合并到 main
+2. 开始 Phase 3：VLM 集成和验证（Issue #6）
 
 ---
 
