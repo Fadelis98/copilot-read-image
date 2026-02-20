@@ -31,8 +31,7 @@
     "node": ">=18"
   },
   "activationEvents": [
-    "onLanguageModel",
-    "onStartupFinished"
+    "*"
   ],
   "contributes": {
     "languageModelTools": [
@@ -41,6 +40,8 @@
         "displayName": "Read Image From Path",
         "description": "Reads an image from a local file path and returns its metadata and content for analysis",
         "modelDescription": "Use this tool to read an image file from a local path. It returns the image format, size, and raw data encoded as base64 for further analysis.",
+        "toolReferenceName": "readImageFromPath",
+        "canBeReferencedInPrompt": true,
         "icon": "$(file-media)",
         "tags": [
           "image",
@@ -64,6 +65,8 @@
         "displayName": "Image From Base64",
         "description": "Decodes a base64-encoded image string and returns its metadata and content for analysis",
         "modelDescription": "Use this tool when you have a base64-encoded image string and need to decode and analyse it. Provide the base64 data and optionally the MIME type.",
+        "toolReferenceName": "imgFromBase64",
+        "canBeReferencedInPrompt": true,
         "icon": "$(symbol-string)",
         "tags": [
           "image",
@@ -91,6 +94,8 @@
         "displayName": "Image From URL",
         "description": "Fetches an image from a URL and returns its metadata and content for analysis",
         "modelDescription": "Use this tool to fetch and analyse an image from a remote URL. It downloads the image and returns its format, size, and content.",
+        "toolReferenceName": "imgFromUrl",
+        "canBeReferencedInPrompt": true,
         "icon": "$(cloud-download)",
         "tags": [
           "image",
