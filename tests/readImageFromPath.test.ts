@@ -23,6 +23,18 @@ import * as os from 'os';
 import * as path from 'path';
 import { ReadImageFromPathTool } from '../src/tools';
 
+function parseDataUrl(value: string): { mimeType: string; data: Buffer } {
+  const match = value.match(/^data:([^;]+);base64,(.+)$/s);
+  if (!match) {
+    throw new Error('Expected data URL text part');
+  }
+
+  return {
+    mimeType: match[1],
+    data: Buffer.from(match[2], 'base64'),
+  };
+}
+
 describe('ReadImageFromPathTool', () => {
   const tool = new ReadImageFromPathTool();
   const fakeToken = {} as Parameters<typeof tool.invoke>[1];
@@ -51,7 +63,8 @@ describe('ReadImageFromPathTool', () => {
     expect(parsed.size).toBe(6);
     expect(parsed.source).toBe(tmpPng);
 
-    const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+    const dataTextPart = result.content[1] as { value: string };
+    const dataPart = parseDataUrl(dataTextPart.value);
     expect(dataPart.mimeType).toBe('image/png');
     expect(dataPart.data).toBeInstanceOf(Buffer);
   });
@@ -97,7 +110,8 @@ describe('ReadImageFromPathTool', () => {
         { input: { imagePath: jpegFile } } as Parameters<typeof tool.invoke>[0],
         fakeToken
       );
-      const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+      const dataTextPart = result.content[1] as { value: string };
+      const dataPart = parseDataUrl(dataTextPart.value);
       expect(dataPart.mimeType).toBe('image/jpeg');
     } finally {
       fs.unlinkSync(jpegFile);
@@ -112,7 +126,8 @@ describe('ReadImageFromPathTool', () => {
         { input: { imagePath: gifFile } } as Parameters<typeof tool.invoke>[0],
         fakeToken
       );
-      const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+      const dataTextPart = result.content[1] as { value: string };
+      const dataPart = parseDataUrl(dataTextPart.value);
       expect(dataPart.mimeType).toBe('image/gif');
     } finally {
       fs.unlinkSync(gifFile);
@@ -127,7 +142,8 @@ describe('ReadImageFromPathTool', () => {
         { input: { imagePath: webpFile } } as Parameters<typeof tool.invoke>[0],
         fakeToken
       );
-      const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+      const dataTextPart = result.content[1] as { value: string };
+      const dataPart = parseDataUrl(dataTextPart.value);
       expect(dataPart.mimeType).toBe('image/webp');
     } finally {
       fs.unlinkSync(webpFile);
@@ -142,7 +158,8 @@ describe('ReadImageFromPathTool', () => {
         { input: { imagePath: bmpFile } } as Parameters<typeof tool.invoke>[0],
         fakeToken
       );
-      const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+      const dataTextPart = result.content[1] as { value: string };
+      const dataPart = parseDataUrl(dataTextPart.value);
       expect(dataPart.mimeType).toBe('image/bmp');
     } finally {
       fs.unlinkSync(bmpFile);

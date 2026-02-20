@@ -20,6 +20,18 @@ jest.mock(
 
 import { ImgFromBase64Tool } from '../src/tools';
 
+function parseDataUrl(value: string): { mimeType: string; data: Buffer } {
+  const match = value.match(/^data:([^;]+);base64,(.+)$/s);
+  if (!match) {
+    throw new Error('Expected data URL text part');
+  }
+
+  return {
+    mimeType: match[1],
+    data: Buffer.from(match[2], 'base64'),
+  };
+}
+
 describe('ImgFromBase64Tool', () => {
   const tool = new ImgFromBase64Tool();
   const fakeToken = {} as Parameters<typeof tool.invoke>[1];
@@ -46,7 +58,8 @@ describe('ImgFromBase64Tool', () => {
     expect(parsed.source).toBe('base64');
     expect(parsed.originalSize).toBe(pngBase64.length);
 
-    const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+    const dataTextPart = result.content[1] as { value: string };
+    const dataPart = parseDataUrl(dataTextPart.value);
     expect(dataPart.mimeType).toBe('image/png');
     expect(dataPart.data).toBeInstanceOf(Buffer);
     expect(dataPart.data.length).toBe(pngBytes.length);
@@ -59,7 +72,8 @@ describe('ImgFromBase64Tool', () => {
       fakeToken
     );
 
-    const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+    const dataTextPart = result.content[1] as { value: string };
+    const dataPart = parseDataUrl(dataTextPart.value);
     expect(dataPart.mimeType).toBe('image/jpeg');
     expect(dataPart.data.slice(0, 3)).toEqual(jpegBytes.slice(0, 3));
   });
@@ -71,7 +85,8 @@ describe('ImgFromBase64Tool', () => {
       fakeToken
     );
 
-    const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+    const dataTextPart = result.content[1] as { value: string };
+    const dataPart = parseDataUrl(dataTextPart.value);
     expect(dataPart.mimeType).toBe('image/png');
   });
 
@@ -82,7 +97,8 @@ describe('ImgFromBase64Tool', () => {
       fakeToken
     );
 
-    const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+    const dataTextPart = result.content[1] as { value: string };
+    const dataPart = parseDataUrl(dataTextPart.value);
     expect(dataPart.mimeType).toBe('image/jpeg');
   });
 
@@ -95,7 +111,8 @@ describe('ImgFromBase64Tool', () => {
       fakeToken
     );
 
-    const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+    const dataTextPart = result.content[1] as { value: string };
+    const dataPart = parseDataUrl(dataTextPart.value);
     expect(dataPart.data.length).toBe(pngBytes.length);
   });
 
@@ -171,7 +188,8 @@ describe('ImgFromBase64Tool', () => {
       { input: { base64Data: dataUri } } as Parameters<typeof tool.invoke>[0],
       fakeToken
     );
-    const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+    const dataTextPart = result.content[1] as { value: string };
+    const dataPart = parseDataUrl(dataTextPart.value);
     expect(dataPart.mimeType).toBe('image/gif');
   });
 
@@ -182,7 +200,8 @@ describe('ImgFromBase64Tool', () => {
       { input: { base64Data: dataUri } } as Parameters<typeof tool.invoke>[0],
       fakeToken
     );
-    const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+    const dataTextPart = result.content[1] as { value: string };
+    const dataPart = parseDataUrl(dataTextPart.value);
     expect(dataPart.mimeType).toBe('image/webp');
   });
 
@@ -193,7 +212,8 @@ describe('ImgFromBase64Tool', () => {
       { input: { base64Data: dataUri } } as Parameters<typeof tool.invoke>[0],
       fakeToken
     );
-    const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+    const dataTextPart = result.content[1] as { value: string };
+    const dataPart = parseDataUrl(dataTextPart.value);
     expect(dataPart.mimeType).toBe('image/bmp');
   });
 
@@ -204,7 +224,8 @@ describe('ImgFromBase64Tool', () => {
       { input: { base64Data: dataUri } } as Parameters<typeof tool.invoke>[0],
       fakeToken
     );
-    const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+    const dataTextPart = result.content[1] as { value: string };
+    const dataPart = parseDataUrl(dataTextPart.value);
     expect(dataPart.mimeType).toBe('image/svg+xml');
   });
 
@@ -215,7 +236,8 @@ describe('ImgFromBase64Tool', () => {
       { input: { base64Data: unknownBytes.toString('base64') } } as Parameters<typeof tool.invoke>[0],
       fakeToken
     );
-    const dataPart = result.content[1] as { data: Buffer; mimeType: string };
+    const dataTextPart = result.content[1] as { value: string };
+    const dataPart = parseDataUrl(dataTextPart.value);
     expect(dataPart.mimeType).toBe('image/png');
   });
 });

@@ -16,12 +16,6 @@ export interface ImgFromUrlInput {
   imageUrl: string;
 }
 
-/** Represents a binary image data part returned in the tool result. */
-interface ImageDataPart {
-  data: Buffer;
-  mimeType: string;
-}
-
 const MIME_TYPE_MAP: Record<Exclude<ImageFormat, 'unknown'>, string> = {
   png: 'image/png',
   jpeg: 'image/jpeg',
@@ -85,11 +79,11 @@ export class ReadImageFromPathTool
       source: resolvedPath,
     });
 
-    const imagePart: ImageDataPart = { data, mimeType };
+    const dataUrl = `data:${mimeType};base64,${data.toString('base64')}`;
 
     return new vscode.LanguageModelToolResult([
       new vscode.LanguageModelTextPart(metadata),
-      imagePart as unknown as vscode.LanguageModelPromptTsxPart,
+      new vscode.LanguageModelTextPart(dataUrl),
     ]);
   }
 }
@@ -164,11 +158,11 @@ export class ImgFromBase64Tool
       source: 'base64',
     });
 
-    const imagePart: ImageDataPart = { data, mimeType };
+    const dataUrl = `data:${mimeType};base64,${data.toString('base64')}`;
 
     return new vscode.LanguageModelToolResult([
       new vscode.LanguageModelTextPart(metadata),
-      imagePart as unknown as vscode.LanguageModelPromptTsxPart,
+      new vscode.LanguageModelTextPart(dataUrl),
     ]);
   }
 }
