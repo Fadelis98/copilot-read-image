@@ -48,6 +48,91 @@ This file is automatically loaded when agents enter this project directory.
 
 ---
 
+## 🤖 两种 Agent 的职责划分
+
+> **⚠️ 重要：在开始任何工作前，必须理解这个区别。**
+
+本项目涉及两种不同的 Agent，它们的能力和职责完全不同：
+
+### 本地 Agent（Local Agent）
+**即：当前与用户对话的 GitHub Copilot（你）**
+
+**能力**：
+- ✅ 完整的本地文件系统读写权限
+- ✅ 可运行终端命令（`npm test`, `npm run build`, `git` 等）
+- ✅ 可使用所有 GitHub MCP 工具
+- ✅ 与用户直接交互，理解自然语言描述的问题
+- ✅ 可在本地解决 merge conflicts 后推送
+
+**核心职责**：
+1. **分析和规划** - 用户通常描述问题或需求（不是具体指令），本地 Agent 需要：
+   - 理解用户意图
+   - 分析现有代码和 issues
+   - 规划解决方案（新建 issue / 选择已有 issue / 直接修复）
+   - 决策：简单任务自己实现 vs 分配给远程 Agent
+2. **审查 PR** - 远程 Agent 创建 PR 后，本地 Agent 负责：
+   - 用 MCP 读取 PR 内容
+   - **本地运行测试**（`npm test`, `npm run build`）
+   - 检查代码质量
+3. **解决冲突** - 如遇复杂 merge conflict：
+   - 本地 checkout 分支
+   - 手动解决冲突
+   - 推送后再合并
+4. **执行合并** - 使用 `mcp_io_github_git_merge_pull_request`
+
+---
+
+### 远程 Agent（Remote Agent）
+**即：通过 `mcp_io_github_git_assign_copilot_to_issue` 分配的 Copilot**
+
+**能力**：
+- ✅ 读取 issue 内容和项目文件
+- ✅ 创建分支、提交代码
+- ✅ 创建 Pull Request
+- ❌ **无法运行本地命令**（不能执行 npm test 等）
+- ❌ **无法合并 PR**（需要本地 Agent 审查后合并）
+- ❌ **无法解决复杂 merge conflicts**
+- ❌ 无法与用户直接交互
+
+**核心职责**：
+1. 读取 issue 规范，理解需求
+2. 实现代码（源码 + 测试 + 文档）
+3. 创建 PR，引用对应 issue
+
+---
+
+### 完整协作流程
+
+```
+用户描述问题/需求（自然语言，不一定是具体指令）
+  │
+  ▼
+本地 Agent：分析 & 规划
+  ├─ 理解用户意图
+  ├─ 检查现有 issues 和代码库
+  ├─ 规划方案（新建 issue / 选已有 issue / 直接修复）
+  └─ 决策：
+       ├─ [简单/紧急] 本地 Agent 直接实现 ──────────────┐
+       └─ [复杂/独立] 分配给远程 Agent                   │
+                │                                        │
+                ▼                                        │
+          远程 Agent：实现代码 + 创建 PR                  │
+                │                                        │
+                ▼                                        │
+          GitHub Actions：CI 自动测试                     │
+                │                                        │
+                ▼                                        │
+          本地 Agent：审查 PR ◄──────────────────────────┘
+                ├─ MCP: pull_request_read（读取代码）
+                ├─ 本地: npm test, npm run build
+                ├─ 检查冲突：
+                │     ├─ [无冲突] 批准并合并
+                │     └─ [有冲突] checkout → 本地解决 → push → 合并
+                └─ MCP: merge_pull_request
+```
+
+---
+
 ## 🎯 项目概述
 
 **项目名称**: copilot-read-image  
@@ -74,12 +159,9 @@ Enable GitHub Copilot to analyze images directly within chat workflows by provid
   - 快速记忆助手
   - 关键链接和命令
 
-**🤖 继续处理Agent工作 (如果在管理Copilot PR)**:
-- [AGENT_MANAGEMENT.md](AGENT_MANAGEMENT.md) - Agent工作管理和审查指南
-  - PR状态检查
-  - 代码审查清单
-  - 合并流程
-  - 问题排查
+**🤖 Agent 协作工作流**:
+- [AGENT_AUTONOMOUS_WORKFLOW.md](AGENT_AUTONOMOUS_WORKFLOW.md) - 本地/远程 Agent 职责和协作流程
+- [AGENT_AUTO_MERGE_GUIDE.md](AGENT_AUTO_MERGE_GUIDE.md) - PR 审查、冲突解决和合并指南
 
 **🔧 Agent工作流改进 (从Phase 1学到的经验)**:
 - [AGENT_WORKFLOW_IMPROVEMENTS.md](AGENT_WORKFLOW_IMPROVEMENTS.md) - Phase 1合并中发现的问题及改进

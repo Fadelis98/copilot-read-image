@@ -116,41 +116,44 @@ copilot-read-image/
 
 ## 🚀 如何在新对话中恢复工作
 
-### 新AI对话启动时的自动流程：
+> **⚠️ 重要**：你是**本地 Agent**，负责分析用户需求、规划方案、审查 PR、解决冲突、执行合并。
+> 远程 Agent（通过 assign_copilot_to_issue 分配）只负责实现代码和创建 PR。
 
-1. **自动加载AGENTS.md**
-   - 获取工作规范和标准
-   - 理解项目结构
-   - 了解进行中的工作
+### 新对话启动时的流程：
 
-2. **快速读取关键文件** (根据任务选择)
-   - **监督Agent工作**: AGENT_MANAGEMENT.md → PR审查和合并
-   - **本地测试扩展**: LOCAL_TESTING_GUIDE.md → 使用F5调试运行
-   - **了解全局计划**: DEVELOPMENT_PLAN.md → 5阶段路线图
-   - **检查系统状态**: SYSTEM_STATUS.md → 当前进度
+1. **自动加载AGENTS.md**（已自动完成）
+   - 了解两种 Agent 的职责区别
+   - 理解项目结构和编码标准
 
-3. **检查GitHub状态**
+2. **快速读取关键文件**
+   - **了解当前进度**: 本文件（SESSION_SNAPSHOT.md）
+   - **审查远程 Agent 的 PR**: [AGENT_AUTO_MERGE_GUIDE.md](AGENT_AUTO_MERGE_GUIDE.md)
+   - **了解协作流程**: [AGENT_AUTONOMOUS_WORKFLOW.md](AGENT_AUTONOMOUS_WORKFLOW.md)
+   - **了解全局计划**: [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md)
+
+3. **检查GitHub实时状态**
    ```bash
-   git log --oneline | head -10    # 最近提交
-   gh pr list --creator=Copilot    # Copilot的PR
-   gh issue list --state=open      # 开放的issues
+   git log --oneline | head -5
+   gh pr list --state=open          # 是否有待审查的 PR？
+   gh issue list --state=open       # 有哪些待处理的 issues？
    ```
 
-4. **确认开发环境**
+4. **验证本地环境**
    ```bash
-   npm test                # 验证测试通过
-   npm run build          # 验证构建成功
-   npm run lint           # 验证代码质量
+   npm ci && npm run build && npm test && npm run lint
    ```
 
-### 选择您的任务类型：
+### 根据情况选择行动：
 
-**🤖 如果要继续处理Agent工作 (PR #7审查和合并)**：
-- 参考 [AGENT_MANAGEMENT.md](AGENT_MANAGEMENT.md)
+**📬 如果有待审查的 PR（远程 Agent 已完成工作）**：
+- 参考 [AGENT_AUTO_MERGE_GUIDE.md](AGENT_AUTO_MERGE_GUIDE.md) 执行审查和合并
 
-**🔬 如果要本地测试扩展功能**：
-- 按 **F5** 启动Extension Development Host
-- 参考 [LOCAL_TESTING_GUIDE.md](LOCAL_TESTING_GUIDE.md) 详细指南
+**📋 如果有待处理的 issues（需要分配给远程 Agent）**：
+- 参考 [AGENT_AUTONOMOUS_WORKFLOW.md](AGENT_AUTONOMOUS_WORKFLOW.md) 分配任务
+
+**💬 如果用户描述了问题/需求（最常见）**：
+- 分析用户意图，检查现有 issues 和代码
+- 规划方案：直接修复 OR 创建/分配 issue 给远程 Agent
 
 ---
 
