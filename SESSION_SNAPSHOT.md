@@ -215,41 +215,54 @@ docs(readme): update usage examples
 
 ## 🤖 如何使用 GitHub Issues 与 Agent 协作
 
-### 分配 Issue 给 Copilot（通过 MCP）
+### 方式一：分配 Issue 给 Copilot Agent（推荐 - 通过 MCP）
 
-在新对话中，您可以：
+在新对话中，直接使用 GitHub Copilot MCP 工具：
 
 1️⃣ **查看所有开放的 issues**:
 ```bash
 # 使用 gh CLI
 gh issue list --state=open
 
-# 或通过 GitHub MCP (在 Copilot 中)
+# 或在 Copilot Chat 中直接问:
 # "List all open issues in the copilot-read-image repo"
 ```
 
-2️⃣ **分配 Issue 给 Agent**:
+2️⃣ **分配 Issue 给 Copilot Agent** ✨:
 ```bash
-# 使用 gh CLI
-gh issue edit 3 --add-assignee @me
+# 在 Copilot Chat 中直接说:
+"Assign issue #3 to Copilot and implement the readImageFromPath tool"
 
-# 或通过 GitHub MCP
-# "Assign issue #3 to Copilot for implementation"
+# Copilot 会使用 MCP 工具:
+# mcp_io_github_git_assign_copilot_to_issue
+# - 自动创建工作分支
+# - 实现代码和测试
+# - 提交 PR 并关闭 issue
 ```
 
-3️⃣ **Agent 开始工作**:
-- Agent 会读取 issue 详情
-- 创建对应的功能分支（如 `feature/issue-3-read-image-from-path`）
-- 实现代码和测试
-- 提交 PR 引用该 issue（`Closes #3`）
-
-4️⃣ **监控 Agent 进度**:
+3️⃣ **监控 Copilot Agent 进度**:
 ```bash
 # 查看与 issue 相关的 PR
 gh pr list --search "issue:3"
 
-# 查看 issue 评论
-gh issue view 3 --comments
+# 或在 Copilot Chat 中:
+"Show me the PR for issue #3"
+```
+
+### 方式二：人类开发者自己处理 Issue
+
+如果您想自己实现（不使用 Copilot Agent）:
+
+```bash
+# 分配给自己
+gh issue edit 3 --add-assignee @me
+
+# 手动创建分支
+git checkout -b feature/issue-3-read-image-from-path
+
+# 实现代码...
+# 提交 PR 时引用 issue
+gh pr create --title "feat: implement readImageFromPath tool" --body "Closes #3"
 ```
 
 ### Issue 模板提供的信息
@@ -264,27 +277,50 @@ gh issue view 3 --comments
 - ✅ **Tests**: 测试用例要求
 - ✅ **References**: 相关文档链接
 
-### 推荐工作流
+### 推荐工作流（使用 Copilot Agent）
 
 ```bash
-# 步骤1: 选择一个 issue（建议从 #3 开始）
-gh issue view 3
+# 步骤1: 查看开放的 issues
+gh issue list --state=open
 
-# 步骤2: 告诉 Copilot 开始工作
-# "Please implement issue #3 (readImageFromPath tool)"
+# 步骤2: 在 Copilot Chat 中直接说（推荐）:
+"Please implement issue #3 - readImageFromPath tool using the assign_copilot_to_issue MCP tool"
 
-# 步骤3: Copilot 会:
-# - 创建分支 feature/issue-3-read-image-from-path
-# - 实现代码
-# - 编写测试
-# - 提交 PR 并引用 issue
+# 或者简单地说:
+"Implement issue #3"
 
-# 步骤4: 审查 PR
+# 步骤3: Copilot 会自动:
+# - 使用 mcp_io_github_git_assign_copilot_to_issue 工具
+# - 创建工作分支
+# - 实现代码和测试
+# - 提交 PR 并引用 issue (自动关闭 issue)
+
+# 步骤4: 审查 Copilot 创建的 PR
 ./scripts/pr-manager.sh check <PR_NUMBER>
 
 # 步骤5: 测试并合并
 # F5 在 VS Code 中测试扩展
-# 通过后合并 PR（自动关闭 issue）
+# 通过后合并 PR
+```
+
+### 备选工作流（手动开发）
+
+如果您想自己开发而不使用 Copilot Agent:
+
+```bash
+# 步骤1: 分配 issue 给自己
+gh issue edit 3 --add-assignee @me
+
+# 步骤2: 创建功能分支
+git checkout -b feature/issue-3-read-image-from-path
+
+# 步骤3: 实现代码和测试
+# ... 开发工作 ...
+
+# 步骤4: 提交 PR
+gh pr create --title "feat: implement readImageFromPath tool" \
+             --body "Closes #3" \
+             --assignee @me
 ```
 
 ---
@@ -340,16 +376,26 @@ b78712c Merge pull request #7: Phase 1 - VS Code extension setup
 3. 🟡 **Issue #4**: 实现 imgFromUrl 工具
 4. ⏳ **Issue #6**: VLM 集成和验证（等待前3个完成）
 
-**如何开始下一步**:
+**如何开始下一步（使用 Copilot Agent）**:
 ```bash
-# 在新对话中，告诉 Copilot:
+# 在新对话的 Copilot Chat 中直接说:
 "Please implement issue #3 - readImageFromPath tool"
 
-# Copilot 会:
-# 1. 读取 issue #3 的完整规范
-# 2. 创建功能分支
-# 3. 实现代码和测试
-# 4. 提交 PR 并引用 issue（自动关闭 issue）
+# Copilot 会自动:
+# 1. 使用 mcp_io_github_git_assign_copilot_to_issue(issue_number: 3)
+# 2. 读取 issue #3 的完整规范
+# 3. 创建功能分支
+# 4. 实现代码和测试
+# 5. 提交 PR 并引用 issue（自动关闭 issue）
+```
+
+**如果您想自己开发**:
+```bash
+# 分配给自己
+gh issue edit 3 --add-assignee @me  # @me = 当前 GitHub 用户
+
+# 创建分支并开发
+git checkout -b feature/issue-3-read-image-from-path
 ```
 
 ---
