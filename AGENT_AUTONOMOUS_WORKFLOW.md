@@ -232,5 +232,25 @@ gh pr list --state=open
 
 ---
 
-**最后更新**: 2026-02-20  
+## 🧾 最近一次 PR 流程实操记录（2026-02-21）
+
+本地 Agent 已按 Issue → PR → merge 实际执行一轮完整流程，记录如下：
+
+1. 在 `dev` 分支完成改动并推送
+2. 创建 Issue [#13](https://github.com/Fadelis98/copilot-read-image/issues/13) 作为跟踪
+3. 尝试直接发起 `dev -> main` 的 PR [#14](https://github.com/Fadelis98/copilot-read-image/pull/14)
+4. 发现 `mergeStateStatus=DIRTY`，存在与主线历史无关的冲突（非本次变更引入）
+5. 采用干净发布路径：从最新 `main` 新建分支，cherry-pick 本次变更提交
+6. 发起替代 PR [#15](https://github.com/Fadelis98/copilot-read-image/pull/15) 并成功 merge
+7. Issue #13 随合并自动关闭
+
+### 实操结论
+
+- 当 `dev` 累积了未准备发布的历史改动时，不应强行 `dev -> main`
+- 应优先使用“`main` 新分支 + cherry-pick 目标提交 + 单独 PR”来确保发布面最小化
+- PR 描述中必须带 `Closes #<issue>`，保证 issue 生命周期自动闭环
+
+---
+
+**最后更新**: 2026-02-21  
 **维护者**: Local Agent (GitHub Copilot in VS Code)
