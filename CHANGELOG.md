@@ -26,6 +26,17 @@ All notable changes to the "copilot-read-image" extension will be documented in 
   - Supports PNG, JPEG, GIF, WebP, BMP, SVG+XML
   - Size limit: rejects decoded data larger than 50 MB
   - Graceful error handling for invalid base64, unsupported MIME types, and empty input
+- Full implementation of `imgFromUrl` tool:
+  - Fetches remote images over HTTP/HTTPS with redirect support (max 5 hops)
+  - SSRF protection blocks localhost, loopback, and private IP ranges
+  - MIME type handling uses Content-Type header with magic-byte fallback
+  - Response size limit: rejects payloads larger than 50 MB
+  - Timeout handling: rejects requests that exceed 30 seconds
+  - Returns metadata and image payload as text parts (data URL format)
+- Tool result compatibility hardening:
+  - Replaced non-standard tool result parts with standard `LanguageModelTextPart`
+  - Fixed runtime error: `Unknown LanguageModelToolResult part type`
+  - Added namespaced tool IDs in manifest/registration for reliable discovery
 
 ## [0.1.0] - Initial Release
 

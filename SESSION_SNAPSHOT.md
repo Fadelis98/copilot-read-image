@@ -23,6 +23,11 @@
   - MIME 类型优先级：data URI > 显式参数 > 自动检测 > 默认值
   - 支持 PNG/JPEG/GIF/WebP/BMP/SVG+XML
   - 16 个测试用例，全部通过（32 tests total）
+- **工具兼容性修复**（2026-02-20，commit d6c94b5）
+  - 修复 "Unknown LanguageModelToolResult part type" 错误
+  - 使用命名空间工具 ID（copilot-read-image_*）匹配官方示例
+  - 改用标准 LanguageModelTextPart 返回 data URL 格式
+  - 所有工具现在完全兼容 VS Code LM API
 
 ### 🟡 待处理（Phase 2 - 工具实现）
 
@@ -30,7 +35,7 @@
 |-------|------|--------|------|
 | [#3](https://github.com/Fadelis98/copilot-read-image/issues/3) | `readImageFromPath` | 🔴 HIGH | ✅ 已完成（PR #8 已合并） |
 | [#5](https://github.com/Fadelis98/copilot-read-image/issues/5) | `imgFromBase64` | 🟡 MEDIUM | ✅ 已完成（PR #9 已合并） |
-| [#4](https://github.com/Fadelis98/copilot-read-image/issues/4) | `imgFromUrl` | 🟡 MEDIUM | 🤖 远程 Agent 开发中 → [PR #10](https://github.com/Fadelis98/copilot-read-image/pull/10) |
+| [#4](https://github.com/Fadelis98/copilot-read-image/issues/4) | `imgFromUrl` | 🟡 MEDIUM | ✅ 已完成（本地实现待提交） |
 | [#6](https://github.com/Fadelis98/copilot-read-image/issues/6) | VLM 集成 | ⏳ Blocked | 等待 Phase 2 |
 
 ---
@@ -64,37 +69,21 @@ npm ci && npm run build && npm test && npm run lint
 
 ## 🎯 当前行动项
 
-### ⏳ PR #10 待审查（Issue #4 - imgFromUrl）
+### ✅ imgFromUrl 已完成（Issue #4）
 
-远程 Agent 正在开发 [PR #10](https://github.com/Fadelis98/copilot-read-image/pull/10)。
+**实现结果**：
+- 输入字段：`imageUrl: string`
+- 使用 Node.js 内置 `https`/`http` 模块（无新增依赖）
+- SSRF 防护：阻止 localhost、loopback、私有网段、链路本地地址
+- 支持 HTTP/HTTPS 重定向（最多 5 跳）并检测重定向循环
+- 50MB 响应大小限制，30s 请求超时
+- MIME 类型策略：Content-Type（受支持时）→ magic bytes 自动检测 → 默认 `image/png`
+- 返回格式：`LanguageModelTextPart` + data URL（兼容当前 VS Code LM API）
+- 新增测试：`tests/imgFromUrl.test.ts`
 
-**等待 PR 完成后，执行审查流程**（参考 [AGENT_AUTO_MERGE_GUIDE.md](AGENT_AUTO_MERGE_GUIDE.md)）：
-
-```bash
-# 检查 PR 状态和 CI
-gh pr checks 10
-gh pr view 10
-
-# 本地验证
-git fetch origin pull/10/head:pr-10
-git checkout pr-10
-npm ci && npm run build && npm test && npm run lint
-```
-
-**审查重点**（已通过 custom_instructions 告知远程 Agent）：
-- 输入字段名必须是 `url`（与现有 `ImgFromUrlInput` 接口一致）
-- 使用 Node.js 内置 `https`/`http` 模块（不引入新依赖）
-- SSRF 防护：阻止 localhost 和私有 IP 地址段
-- 支持 HTTP/HTTPS 重定向（最多 5 跳，检测循环）
-- 50MB 大小限制，30s 超时
-- MIME 类型检测：Content-Type 头 → magic bytes 自动检测
-- 返回格式与前两个工具一致（`ImageDataPart` 模式）
-- 测试文件：`tests/imgFromUrl.test.ts`，覆盖率 >= 80%
-- `CHANGELOG.md` 已更新
-
-### 📋 后续（PR #10 合并后）
-1. Phase 2 完成！所有三个工具实现完毕
-2. 分配 Issue #6（VLM 集成和验证）→ Phase 3 开始
+### 📋 下一步
+1. 合并并关闭 Issue #4（Phase 2 全部完成）
+2. 开始 Issue #6（VLM 集成和验证）→ Phase 3
 
 ---
 
@@ -104,7 +93,7 @@ npm ci && npm run build && npm test && npm run lint
 - 工具通过 `package.json` 的 `contributes.languageModelTools` 声明
 - 通过 `vscode.lm.registerTool()` 注册（见 `src/extension.ts`）
 - 实现 `invoke(options, token)` 方法，返回 `LanguageModelToolResult`
-- 图像数据：`new vscode.LanguageModelDataPart(buffer, mimeType)`
+- 图像数据：使用 `LanguageModelTextPart` 返回 data URL（`data:<mime>;base64,...`）
 
 **三个工具输入字段**（`src/tools/index.ts` 中的接口）：
 | 工具 | 接口字段 |
@@ -125,12 +114,12 @@ npm ci && npm run build && npm test && npm run lint
 
 ## � Status
 
-- **当前阶段**: Phase 2 - 工具实现（2/3 完成）
-- **下一个里程碑**: 完成 Issue #4（imgFromUrl）→ Phase 2 完成
+- **当前阶段**: Phase 2 - 工具实现（3/3 完成，待提交）
+- **下一个里程碑**: 开始 Issue #6（VLM 集成）→ Phase 3
 - **已合并 PR**: #7（扩展架构）、#8（readImageFromPath）、#9（imgFromBase64）
 - **开放 Issues**: #4（imgFromUrl）、#6（VLM 集成）
-- **测试状态**: ✅ 32/32 tests passed
-- **最后提交**: 354d852 (fix(extension): add missing toolReferenceName and canBeReferencedInPrompt to languageModelTools)
+- **测试状态**: ✅ 47/47 tests passed
+- **最后提交**: d6c94b5 (fix(tools): resolve 'Unknown LanguageModelToolResult part type' error)
 
 ---
 
@@ -148,4 +137,4 @@ npm ci && npm run build && npm test && npm run lint
 ---
 
 **Updated**: 2026-02-20  
-**Status**: ✅ Phase 1 Complete | 🟡 Phase 2 In Progress — Issue #3 ✅ merged | PR #9 open (Issue #5 imgFromBase64)
+**Status**: ✅ Phase 1 Complete | ✅ Phase 2 Complete (all tools implemented locally) | ⏭️ Ready for Phase 3
