@@ -13,6 +13,12 @@ All notable changes to the "copilot-read-image" extension will be documented in 
 - Extension manifest metadata (displayName, publisher, activationEvents)
 - `.vscodeignore` for packaging
 - `.vscode/launch.json` for extension debugging
+- Full implementation of `readImageFromPath` tool:
+  - Reads local image files (PNG, JPEG, GIF, WebP, BMP) and returns metadata + binary data
+  - Auto-detects MIME type from magic bytes via `detectFormat`
+  - Path traversal protection: relative paths are validated against the working directory
+  - File size limit: rejects files larger than 50 MB
+  - Graceful error handling for missing files, unsupported formats, and permission errors
 
 ## [0.1.0] - Initial Release
 
