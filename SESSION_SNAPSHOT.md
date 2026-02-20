@@ -42,6 +42,14 @@ npm ci && npm run build && npm test && npm run lint
 - 需要分配 issue → 参考 [AGENT_AUTONOMOUS_WORKFLOW.md](AGENT_AUTONOMOUS_WORKFLOW.md)
 - 用户描述需求 → 分析意图，规划方案（直接实现 or 分配给远程 Agent）
 
+> **📝 文档更新规则**：每次完成关键操作后必须更新本文件并 push：
+>
+> | 操作 | 需要更新的内容 |
+> |------|---------------|
+> | assign issue 给远程 Agent | issue 状态 → "🤖 远程 Agent 开发中 → PR #N" |
+> | PR 合并 | issue 状态 → ✅，更新"当前行动项"，更新底部 Status |
+> | 发现新 issue/需求 | 添加到待处理列表 |
+
 ---
 
 ## 🎯 当前行动项

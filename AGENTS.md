@@ -212,6 +212,12 @@ Enable GitHub Copilot to analyze images directly within chat workflows by provid
    - 监视检查是否通过
    - 如有失败，进行修复后再push
 
+> **📝 文档更新提醒（本地 Agent 职责）**
+> 每次完成以下操作后，必须更新 `SESSION_SNAPSHOT.md` 并 push 到 main：
+> - **assign issue 给远程 Agent** → 更新 issue 状态为 "🤖 远程 Agent 开发中 → PR #N"
+> - **PR 合并完成** → 将 issue 标记为 ✅，更新"当前行动项"为下一个任务，更新底部 Status 行
+> - **发现新问题/需求** → 更新"待处理"列表
+
 ---
 
 ## 📋 代码标准 & 最佳实践

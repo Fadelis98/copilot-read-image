@@ -214,11 +214,23 @@ npm test
 
 # 3. 清理本地临时分支
 git branch -d pr-<N>
-
-# 4. 更新 SESSION_SNAPSHOT.md
-# 将已完成的 issue 标记为 ✅
-# 更新"下一步"为下一个 issue
 ```
+
+**4. ⚠️ 必须更新 SESSION_SNAPSHOT.md（不可跳过）**
+
+在 `SESSION_SNAPSHOT.md` 中：
+- 将已合并的 issue 行改为：`✅ 已完成（PR #N 已合并）`
+- 更新"当前行动项"为下一个待处理 issue
+- 更新底部 Status 行
+
+```bash
+git add SESSION_SNAPSHOT.md
+git commit -m "docs: update snapshot - Issue #N merged, next: Issue #M"
+git push origin main
+```
+
+> **为什么这一步不可跳过？**
+> SESSION_SNAPSHOT.md 是新对话恢复状态的唯一来源。如果不更新，下一个对话的 Agent 会以为 PR 还在开发中，导致重复工作或错误决策。
 
 ---
 
