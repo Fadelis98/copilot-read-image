@@ -80,9 +80,9 @@ npm test        # run tests / 运行测试
 npm run lint    # check lint / 代码检查
 ```
 
-See [LOCAL_TESTING_GUIDE.md](LOCAL_TESTING_GUIDE.md) for debugging the extension in VS Code.
+Use VS Code's **Run and Debug** to launch the Extension Development Host for local debugging.
 
-调试扩展详见 [LOCAL_TESTING_GUIDE.md](LOCAL_TESTING_GUIDE.md)。
+本地调试可使用 VS Code 的 **Run and Debug** 启动 Extension Development Host。
 
 ---
 
