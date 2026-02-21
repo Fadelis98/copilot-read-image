@@ -4,6 +4,13 @@ All notable changes to the "copilot-read-image" extension will be documented in 
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-02-21
+
+### Changed
+- Updated PR validation workflow to enforce `package.json` version and `CHANGELOG.md` updates for PRs targeting `main`
+- Fixed workflow script YAML parsing for Copilot PR auto-comment checks
+- Removed `README.md` references to internal docs that are intentionally kept only on `dev`
+
 ## [0.3.0] - 2026-02-21
 
 ### Changed
