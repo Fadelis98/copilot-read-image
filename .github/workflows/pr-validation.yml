@@ -148,32 +148,36 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const body = [
+              '## 🤖 Copilot工作流验证清单',
+              '',
+              '### 自动检查',
+              '- ✓ 代码格式与Linting',
+              '- ✓ 单元测试执行',
+              '- ✓ TypeScript编译',
+              '',
+              '### 手动核查项',
+              '- [ ] PR标题包含标签 ([feat], [fix], [docs] 等)',
+              '- [ ] PR描述清晰，说明目的和改动',
+              '- [ ] 所有issue都正确关联',
+              '- [ ] 没有merge conflicts',
+              '- [ ] 没有 console.log 或 debugger 语句',
+              '- [ ] 新代码有相应的测试',
+              '- [ ] 更新了CHANGELOG.md (如果是新版本)',
+              '',
+              '### 代理商检查项',
+              '- [ ] 代码按照项目规范编写',
+              '- [ ] 国际化支持正确',
+              '- [ ] 没有安全隐患',
+              '- [ ] IDE特定的代码/配置被排除',
+              '',
+              '---',
+              '> 提示: 主要贡献者将在合并前进行最后审查'
+            ].join('\n');
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## 🤖 Copilot工作流验证清单
-
-### 自动检查
-- ✓ 代码格式与Linting
-- ✓ 单元测试执行
-- ✓ TypeScript编译
-
-### 手动核查项
-- [ ] PR标题包含标签 ([feat], [fix], [docs] 等)
-- [ ] PR描述清晰，说明目的和改动
-- [ ] 所有issue都正确关联
-- [ ] 没有merge conflicts
-- [ ] 没有 console.log 或 debugger 语句
-- [ ] 新代码有相应的测试
-- [ ] 更新了CHANGELOG.md (如果是新版本)
-
-### 代理商检查项
-- [ ] 代码按照项目规范编写
-- [ ] 国际化支持正确
-- [ ] 没有安全隐患
-- [ ] IDE特定的代码/配置被排除
-
----
-> 提示: 主要贡献者将在合并前进行最后审查`
+              body,
             })
