@@ -65,7 +65,7 @@ PNG, JPEG, GIF, WebP, BMP, SVG
 
 ## Security / 安全说明
 
-- **`imgFromUrl`** blocks requests to `localhost`, loopback addresses, and all RFC-1918 private IP ranges (including IPv6 link-local). SSRF 防护：拦截 localhost、回环地址及所有 RFC-1918 私有 IP 段（含 IPv6 link-local）。
+- **`imgFromUrl`** allows `localhost` hostnames, but still blocks loopback IP literals and all RFC-1918 private IP ranges (including IPv6 link-local). SSRF 防护：允许 `localhost` 主机名，但仍拦截回环 IP 字面量及所有 RFC-1918 私有 IP 段（含 IPv6 link-local）。
 - Maximum image size: **50 MB**. 单张图像最大 50 MB。
 - Redirect limit: **5 hops**, with loop detection and 30-second timeout. 最多跟随 5 次重定向，包含环路检测和 30 秒超时。
 

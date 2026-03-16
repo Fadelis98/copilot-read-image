@@ -4,6 +4,11 @@ All notable changes to the "copilot-read-image" extension will be documented in 
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-03-16
+
+### Changed
+- `imgFromUrl` now allows `localhost` hostnames while still blocking loopback IP literals and private IP ranges
+
 ## [0.3.1] - 2026-02-21
 
 ### Changed
@@ -56,7 +61,7 @@ All notable changes to the "copilot-read-image" extension will be documented in 
   - Graceful error handling for invalid base64, unsupported MIME types, and empty input
 - Full implementation of `imgFromUrl` tool:
   - Fetches remote images over HTTP/HTTPS with redirect support (max 5 hops)
-  - SSRF protection blocks localhost, loopback, and private IP ranges
+  - SSRF protection allows `localhost` hostnames while still blocking loopback and private IP ranges
   - MIME type handling uses Content-Type header with magic-byte fallback
   - Response size limit: rejects payloads larger than 50 MB
   - Timeout handling: rejects requests that exceed 30 seconds

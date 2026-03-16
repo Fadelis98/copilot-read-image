@@ -183,7 +183,7 @@ export class ImgFromUrlTool implements vscode.LanguageModelTool<ImgFromUrlInput>
 
     const url = new URL(imageUrl); // Validates URL format
 
-    // SSRF protection: block private IP ranges and localhost
+    // SSRF protection: block private IP ranges while allowing localhost hostnames
     this.validateUrlSecurity(url);
 
     const { data, contentType } = await this.fetchWithRedirects(url, new Set<string>(), 0);
@@ -219,11 +219,6 @@ export class ImgFromUrlTool implements vscode.LanguageModelTool<ImgFromUrlInput>
     }
 
     const hostname = url.hostname.toLowerCase();
-
-    // Block localhost
-    if (hostname === 'localhost') {
-      throw new Error('Access to localhost is not allowed');
-    }
 
     if (net.isIPv4(hostname)) {
       const [a, b] = hostname.split('.').map((part) => Number(part));

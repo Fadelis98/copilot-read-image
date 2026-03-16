@@ -292,13 +292,21 @@ describe('ImgFromUrlTool', () => {
     ).rejects.toThrow();
   });
 
-  it('blocks localhost', async () => {
-    await expect(
-      tool.invoke(
-        { input: { imageUrl: 'http://localhost:8080/test.png' } } as Parameters<typeof tool.invoke>[0],
-        fakeToken
-      )
-    ).rejects.toThrow('Access to localhost is not allowed');
+  it('allows localhost hostnames', async () => {
+    setupGet(http.get as jest.Mock, {
+      statusCode: 200,
+      headers: { 'content-type': 'image/png' },
+      body: [pngBytes],
+    });
+
+    const result = await tool.invoke(
+      { input: { imageUrl: 'http://localhost:8080/test.png' } } as Parameters<typeof tool.invoke>[0],
+      fakeToken
+    );
+
+    const dataPart = result.content[1] as { data: Uint8Array; mimeType: string };
+    expect(dataPart.mimeType).toBe('image/png');
+    expect(Buffer.from(dataPart.data)).toEqual(pngBytes);
   });
 
   it('blocks loopback/private IPv4', async () => {
